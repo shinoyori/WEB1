@@ -7,39 +7,44 @@
 <fmt:bundle basename="message">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> <%-- For responsiveness --%>
         <title><fmt:message key="page.title" /></title>
         <link href="${pageContext.request.contextPath}/layout.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-    <h1><fmt:message key="page.label" /></h1>
+    <div class="login-form-container">  <%-- This is the main wrapper for centering --%>
+        <h1><fmt:message key="page.label" /></h1> <%-- "Welcome to the system" --%>
 
-    <c:if test="${not empty requestScope.mensagens and requestScope.mensagens.existeErros}">
-        <div id="erro">
-            <ul>
-                <c:forEach var="erro" items="${requestScope.mensagens.erros}">
-                    <li>${erro}</li>
-                </c:forEach>
-            </ul>
-        </div>
-    </c:if>
+        <c:if test="${not empty requestScope.mensagens and requestScope.mensagens.existeErros}">
+            <div id="erro">
+                <ul>
+                    <c:forEach var="erro" items="${requestScope.mensagens.erros}">
+                        <li><c:out value="${erro}" /></li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </c:if>
 
-    <form method="post" action="${pageContext.request.contextPath}/">
-        <table>
-            <tr>
-                <th><fmt:message key="user.login" />:</th>
-                <td><input type="text" name="login" value="${param.login}"/></td>
-            </tr>
-            <tr>
-                <th><fmt:message key="user.password" />:</th>
-                <td><input type="text" name="senha" /></td> <%-- Mantido como type="text" conforme sua solicitação --%>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" name="bOK" value="<fmt:message key='user.login'/>" />
-                </td>
-            </tr>
-        </table>
-    </form>
+            <%-- The IndexController is mapped to /login. Targeting /login is clearer. --%>
+        <form method="post" action="${pageContext.request.contextPath}/login">
+            <div>
+                <label for="loginField"><fmt:message key="user.login" />:</label>
+                <input type="text" id="loginField" name="login" value="<c:out value='${param.login}'/>" required />
+            </div>
+            <div>
+                <label for="passwordField"><fmt:message key="user.password" />:</label>
+                    <%-- Kept as type="text" as per your file's comment. For security, consider type="password". --%>
+                <input type="text" id="passwordField" name="senha" required />
+            </div>
+            <div>
+                    <%-- The key 'user.login' might display as "Email" on the button.
+                         Using 'page.title' (which is "Login") for the button value seems more appropriate based on your message keys.
+
+                    --%>
+                <input type="submit" name="bOK" value="<fmt:message key='page.title'/>" />
+            </div>
+        </form>
+    </div>
     </body>
 </fmt:bundle>
 </html>
