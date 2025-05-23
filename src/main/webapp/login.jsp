@@ -13,19 +13,17 @@
     <body>
     <h1><fmt:message key="page.label" /></h1>
 
-    <!-- Erros de login -->
-    <c:if test="${not empty mensagens and mensagens.existeErros}">
+    <c:if test="${not empty requestScope.mensagens and requestScope.mensagens.existeErros}">
         <div id="erro">
             <ul>
-                <c:forEach var="erro" items="${mensagens.erros}">
+                <c:forEach var="erro" items="${requestScope.mensagens.erros}">
                     <li>${erro}</li>
                 </c:forEach>
             </ul>
         </div>
     </c:if>
 
-    <!-- Formulário de login -->
-    <form method="post" action="${pageContext.request.contextPath}/login">
+    <form method="post" action="${pageContext.request.contextPath}/">
         <table>
             <tr>
                 <th><fmt:message key="user.login" />:</th>
@@ -33,7 +31,7 @@
             </tr>
             <tr>
                 <th><fmt:message key="user.password" />:</th>
-                <td><input type="password" name="senha" /></td>
+                <td><input type="text" name="senha" /></td> <%-- Mantido como type="text" conforme sua solicitação --%>
             </tr>
             <tr>
                 <td colspan="2">

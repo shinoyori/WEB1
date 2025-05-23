@@ -43,7 +43,7 @@ public class UsuarioController extends HttpServlet {
         Erro erros = new Erro();
 
         if (usuario == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp"); // Redirecionamento aqui
             return;
         }
 
@@ -52,10 +52,10 @@ public class UsuarioController extends HttpServlet {
             action = "";
         }
 
-        // Ações restritas que apenas ADMIN pode acessar
+        //apenas ADMIN pode acessar
         boolean apenasAdmin = List.of("/cadastro", "/insercao", "/edicao", "/atualizacao", "/remocao").contains(action);
 
-        // Se não for ADMIN e tentar acessar algo restrito
+        //se não for ADMIN e tentar acessar algo restrito
         if (apenasAdmin && !usuario.getTipo().hasAccess(Role.ADMIN)) {
             erros.add("Acesso não autorizado!");
             erros.add("Apenas administradores podem acessar essa funcionalidade.");
@@ -64,8 +64,8 @@ public class UsuarioController extends HttpServlet {
             return;
         }
 
-        // Se for GUEST, não tem permissão pra nada aqui
-        if (!usuario.getTipo().hasAccess(Role.USER)) {
+        //se for GUEST, não tem permissão pra nada aqui
+        if (!usuario.getTipo().hasAccess(Role.TESTER)) { // <-- Problema: GUEST não deveria acessar nem a lista?
             erros.add("Acesso não autorizado!");
             erros.add("Você precisa estar logado como testador ou administrador.");
             request.setAttribute("mensagens", erros);
@@ -127,11 +127,11 @@ public class UsuarioController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String nome = request.getParameter("nome");
-        String email = request.getParameter("email");
+        String login = request.getParameter("login");
         String senha = request.getParameter("senha");
         Role tipo = Role.valueOf(request.getParameter("tipo"));
 
-        Usuario usuario = new Usuario(nome, email, senha, tipo);
+        Usuario usuario = new Usuario(nome, login, senha, tipo);
         dao.insert(usuario);
 
         response.sendRedirect("lista");
@@ -143,11 +143,12 @@ public class UsuarioController extends HttpServlet {
 
         Long id = Long.parseLong(request.getParameter("id"));
         String nome = request.getParameter("nome");
-        String email = request.getParameter("email");
+        // String email = request.getParameter("email");
+        String login = request.getParameter("login");
         String senha = request.getParameter("senha");
         Role tipo = Role.valueOf(request.getParameter("tipo"));
 
-        Usuario usuario = new Usuario(id, nome, email, senha, tipo);
+        Usuario usuario = new Usuario(id, nome, login, senha, tipo);
         dao.update(usuario);
 
         response.sendRedirect("lista");

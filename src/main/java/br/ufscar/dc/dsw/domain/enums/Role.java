@@ -2,7 +2,7 @@ package br.ufscar.dc.dsw.domain.enums;
 
 public enum Role {
     GUEST(0),
-    USER(1),
+    TESTER(1),
     ADMIN(2);
 
     private final int nivel;

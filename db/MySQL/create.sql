@@ -10,3 +10,7 @@ CREATE TABLE Usuario (
                          role ENUM('ADMIN', 'TESTER', 'GUEST') NOT NULL DEFAULT 'GUEST',
                          PRIMARY KEY (id)
 );
+
+INSERT INTO Usuario (nome, login, senha, role) VALUES ('Administrador', 'admin', 'admin', 'ADMIN');
+
+INSERT INTO Usuario (nome, login, senha, role) VALUES ('Testador', 'tester', 'tester', 'TESTER');
