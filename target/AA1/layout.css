@@ -1,0 +1,10 @@
+body {
+    background-color: lightblue !important; /* Add !important to override other potential styles for testing */
+}
+
+#erro {
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid red;
+    background-color: beige;
+}
