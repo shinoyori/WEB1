@@ -1,10 +1,12 @@
 package br.ufscar.dc.dsw.domain;
 
+import br.ufscar.dc.dsw.domain.enums.Role;
+
 public class Usuario {
 
     private Long id;
     private String nome;
-    private String email;
+    private String login;
     private String senha;
     private Role tipo;
 
@@ -12,17 +14,17 @@ public class Usuario {
         this.id = id;
     }
 
-    public Usuario(String nome, String email, String senha, Role tipo) {
+    public Usuario(String nome, String login, String senha, Role tipo) {
         this.nome = nome;
-        this.email = email;
+        this.login = login;
         this.senha = senha;
         this.tipo = tipo;
     }
 
-    public Usuario(Long id, String nome, String email, String senha, Role tipo) {
+    public Usuario(Long id, String nome, String login, String senha, Role tipo) {
         this.id = id;
         this.nome = nome;
-        this.email = email;
+        this.login = login;
         this.senha = senha;
         this.tipo = tipo;
     }
@@ -41,11 +43,11 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public String getEmail() {
-        return email;
+    public String getLogin() {
+        return login;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getSenha() {
