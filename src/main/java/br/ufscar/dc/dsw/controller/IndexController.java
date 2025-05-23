@@ -13,7 +13,7 @@ import br.ufscar.dc.dsw.domain.enums.Role;
 import br.ufscar.dc.dsw.util.Erro;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "Index", urlPatterns = { "/", "/index.jsp", "/logout.jsp", "/login" }) // Adicionado "/login" para centralizar o POST do login
+@WebServlet(name = "Index", urlPatterns = { "/home", "/logout.jsp", "/login" }) // Adicionado "/login" para centralizar o POST do login
 public class IndexController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
