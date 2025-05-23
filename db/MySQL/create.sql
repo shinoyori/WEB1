@@ -1,9 +1,12 @@
-create database Login;
+CREATE DATABASE IF NOT EXISTS Sistema;
 
-use Login
+USE Sistema;
 
-create table Usuario(id bigint not null auto_increment, nome varchar(256) not null, login varchar(20) not null unique, senha varchar(64) not null, papel varchar(10), primary key (id));
-
-insert into Usuario(nome, login, senha, papel) values ('Administrador', 'admin', 'admin', 'ADMIN');
-
-insert into Usuario(nome, login, senha, papel) values ('Usuario', 'user', 'user', 'USER');
+CREATE TABLE Usuario (
+                         id BIGINT NOT NULL AUTO_INCREMENT,
+                         nome VARCHAR(100) NOT NULL,
+                         login VARCHAR(100) NOT NULL UNIQUE,
+                         senha VARCHAR(150) NOT NULL,
+                         role ENUM('ADMIN', 'TESTER', 'GUEST') NOT NULL DEFAULT 'GUEST',
+                         PRIMARY KEY (id)
+);

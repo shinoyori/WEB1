@@ -1,5 +1,7 @@
 package br.ufscar.dc.dsw.domain;
 
+import br.ufscar.dc.dsw.domain.enums.SessionStatus;
+
 import java.time.LocalDateTime;
 
 public class Sessao {
