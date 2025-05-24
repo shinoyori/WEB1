@@ -50,6 +50,18 @@
                             <fmt:message key="projects.create" />
                         </a>
                     </li>
+
+                        <%-- Inside the <ul> under admin.menu.heading --%>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/admin/estrategias/cadastro" class="admin-menu-button">
+                            <fmt:message key="strategies.create" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/estrategias/lista" class="admin-menu-button"> <%-- Public list, but useful for admin to navigate --%>
+                            <fmt:message key="strategies.list" />
+                        </a>
+                    </li>
                         <%-- Example for other links if needed --%>
                         <%--
                         <li>

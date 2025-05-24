@@ -8,11 +8,13 @@ br\ufscar\dc\dsw\controller\UsuarioController.class
 br\ufscar\dc\dsw\util\Erro.class
 br\ufscar\dc\dsw\controller\AdminController.class
 br\ufscar\dc\dsw\domain\Sessao.class
+br\ufscar\dc\dsw\dao\EstrategiaDAO.class
 br\ufscar\dc\dsw\controller\IndexController.class
 br\ufscar\dc\dsw\domain\Imagem.class
 br\ufscar\dc\dsw\domain\Estrategia.class
 br\ufscar\dc\dsw\controller\ProjetoController.class
 br\ufscar\dc\dsw\domain\Usuario.class
+br\ufscar\dc\dsw\controller\EstrategiaController.class
 br\ufscar\dc\dsw\domain\Projeto.class
 br\ufscar\dc\dsw\domain\enums\Role.class
 br\ufscar\dc\dsw\dao\GenericDAO.class

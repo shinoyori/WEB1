@@ -44,8 +44,7 @@
             <nav class="public-info-nav">
                 <h2><fmt:message key="public.info.link1"/> / <fmt:message key="public.info.link2"/></h2>
                 <ul>
-                    <li><a href="#"><fmt:message key="public.info.link1" /></a></li>
-                    <li><a href="#"><fmt:message key="public.info.link2" /></a></li>
+                    <li><a href="${pageContext.request.contextPath}/estrategias/lista"><fmt:message key="strategies.list" /></a></li>
                 </ul>
             </nav>
         </div>
