@@ -650,3 +650,43 @@ body {
 .button-details:hover {
     background-color: #138496;
 }
+
+/* Buttons for session lifecycle */
+.button-start {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+.button-start:hover {
+    background-color: #218838;
+}
+
+.button-finish {
+    background-color: #007bff; /* Blue */
+    color: white;
+}
+.button-finish:hover {
+    background-color: #0056b3;
+}
+
+.button-cancel { /* General cancel button, can be red or gray */
+    background-color: #dc3545; /* Red */
+    /* or background-color: #6c757d; Grey */
+    color: white;
+}
+.button-cancel:hover {
+    background-color: #c82333; /* Darker Red */
+    /* or background-color: #5a6268; Darker Grey */
+}
+
+/* Ensure .button class styles (padding, border-radius, etc.) apply to these */
+/* For table action buttons, make them a bit smaller */
+.data-table .button {
+    padding: 5px 10px;
+    font-size: 0.85em;
+    margin-right: 5px;
+    margin-bottom: 5px; /* For wrapping */
+}
+.data-table form { /* To make forms with buttons align well in table cells */
+    display: inline-block;
+    margin: 0;
+}
