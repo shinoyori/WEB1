@@ -180,4 +180,35 @@ public class ProjetoDAO extends GenericDAO {
             throw new RuntimeException("Error deleting project: " + e.getMessage(), e);
         }
     }
+
+    public List<Projeto> getProjetosByUsuarioId(Long usuarioId) {
+        List<Projeto> listaProjetos = new ArrayList<>();
+        String sql = "SELECT p.id, p.nome, p.descricao, p.criadoEm " +
+                "FROM Projeto p " +
+                "JOIN Projeto_Usuario pu ON p.id = pu.projeto_id " +
+                "WHERE pu.usuario_id = ? " +
+                "ORDER BY p.nome ASC";
+
+        try (Connection conn = this.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, usuarioId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String descricao = rs.getString("descricao");
+                LocalDateTime criadoEm = rs.getTimestamp("criadoEm").toLocalDateTime();
+                // For the dashboard, we might not need the full user list for each project here.
+                // If needed, another query or modification to this one would be required.
+                Projeto projeto = new Projeto(id, nome, descricao, criadoEm, new ArrayList<>()); // Pass empty user list for now
+                listaProjetos.add(projeto);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching projetos by usuarioId: " + e.getMessage(), e);
+        }
+        return listaProjetos;
+    }
 }
