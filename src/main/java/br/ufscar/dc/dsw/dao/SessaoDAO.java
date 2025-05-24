@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SessaoDAO extends GenericDAO {
 
-    // DAOs for related entities, useful for constructing full Sessao objects
+    // Dependencias de outros DAOS pra carregar relações
     private final UsuarioDAO usuarioDAO;
     private final EstrategiaDAO estrategiaDAO;
     private final ProjetoDAO projetoDAO;
@@ -117,30 +117,29 @@ public class SessaoDAO extends GenericDAO {
 
     public List<Sessao> getAllByProjetoId(int projetoId, String sortBy, String sortOrder) {
         List<Sessao> listaSessoes = new ArrayList<>();
-        // Basic sort, can be expanded
-        String orderByClause = " ORDER BY s.criadoEm DESC"; // Default sort by creation date descending
+        String orderByClause = " ORDER BY s.criadoEm DESC"; 
         if (sortBy != null && !sortBy.isEmpty()) {
-            String column = "s.criadoEm"; // default column
+            String column = "s.criadoEm"; 
             if ("titulo".equalsIgnoreCase(sortBy)) {
                 column = "s.titulo";
             } else if ("status".equalsIgnoreCase(sortBy)) {
                 column = "s.status";
-            } else if ("testador".equalsIgnoreCase(sortBy)) { // Sorting by tester name would require a JOIN
+            } else if ("testador".equalsIgnoreCase(sortBy)) { 
                 column = "u.nome";
             }
-            // Validate sortOrder
+           
             String order = "ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder) ? sortOrder.toUpperCase() : "DESC";
 
-            if ("u.nome".equals(column)) { // If sorting by tester name, ensure JOIN
+            if ("u.nome".equals(column)) { 
                 orderByClause = " ORDER BY " + column + " " + order;
             } else {
-                orderByClause = " ORDER BY s." + column.substring(2) + " " + order; // remove s. prefix if not a join column
+                orderByClause = " ORDER BY s." + column.substring(2) + " " + order; 
             }
         }
 
-        // Adjust SQL if sorting by tester name to include JOIN
+        
         String sql = "SELECT s.* FROM Sessao s ";
-        if ("u.nome".equals(orderByClause.split(" ")[2])) { // Check if sort column is u.nome
+        if ("u.nome".equals(orderByClause.split(" ")[2])) { 
             sql += "JOIN Usuario u ON s.testador_id = u.id ";
         }
         sql += "WHERE s.projeto_id = ?" + orderByClause;
@@ -164,9 +163,7 @@ public class SessaoDAO extends GenericDAO {
 
     public List<Sessao> getAllByTestadorId(long testadorId, String sortBy, String sortOrder) {
         List<Sessao> listaSessoes = new ArrayList<>();
-        // Similar sorting logic as getAllByProjetoId, adapt as needed
         String orderByClause = " ORDER BY criadoEm DESC"; // Default
-        // ... (implement full sorting logic here if needed) ...
 
         String sql = "SELECT * FROM Sessao WHERE testador_id = ?" + orderByClause;
         try (Connection conn = this.getConnection();
@@ -194,21 +191,22 @@ public class SessaoDAO extends GenericDAO {
         }
     }
 
-    // Helper method to map ResultSet to Sessao object
+    
     private Sessao mapResultSetToSessao(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("id");
         String titulo = rs.getString("titulo");
         String descricaoSessao = rs.getString("descricao");
-
+         // Carregamento de relacionamentos
         long testadorId = rs.getLong("testador_id");
-        Usuario testador = usuarioDAO.get(testadorId); // Fetch full Usuario object
+        Usuario testador = usuarioDAO.get(testadorId); 
 
         int estrategiaId = rs.getInt("estrategia_id");
-        Estrategia estrategia = estrategiaDAO.get(estrategiaId); // Fetch full Estrategia object
+        Estrategia estrategia = estrategiaDAO.get(estrategiaId); 
 
         int projetoId = rs.getInt("projeto_id");
-        Projeto projeto = projetoDAO.get(projetoId); // Fetch full Projeto object
+        Projeto projeto = projetoDAO.get(projetoId); 
 
+          // Controle do ciclo de vida
         SessionStatus status = SessionStatus.valueOf(rs.getString("status"));
         LocalDateTime criadoEm = rs.getTimestamp("criadoEm").toLocalDateTime();
 
