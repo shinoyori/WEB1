@@ -14,3 +14,20 @@ CREATE TABLE Usuario (
 INSERT INTO Usuario (nome, login, senha, role) VALUES ('Administrador', 'admin', 'admin', 'ADMIN');
 
 INSERT INTO Usuario (nome, login, senha, role) VALUES ('Testador', 'tester', 'tester', 'TESTER');
+
+
+CREATE TABLE Projeto (
+                         id INT NOT NULL AUTO_INCREMENT,
+                         nome VARCHAR(255) NOT NULL,
+                         descricao TEXT,
+                         criadoEm DATETIME NOT NULL,
+                         PRIMARY KEY (id)
+);
+
+CREATE TABLE Projeto_Usuario (
+                                 projeto_id INT NOT NULL,
+                                 usuario_id BIGINT NOT NULL,
+                                 PRIMARY KEY (projeto_id, usuario_id),
+                                 FOREIGN KEY (projeto_id) REFERENCES Projeto(id) ON DELETE CASCADE,
+                                 FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE
+);

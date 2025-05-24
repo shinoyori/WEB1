@@ -240,3 +240,290 @@ body {
 .login-form-container #erro li {
     font-size: 0.9rem;
 }
+
+
+
+/* General page structure (ensure these are defined from previous steps) */
+/* html, body, .container, .page-header, .login-logout-nav, .button, .page-footer */
+
+/* Styles for .card look (can be reused) */
+.card {
+    background-color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 25px;
+}
+
+.page-header .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.page-header .site-title {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #ffffff; /* Assuming header has dark background from previous styles */
+}
+
+/* Admin Dashboard Specific Styles */
+.admin-dashboard h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    font-size: 2.2rem;
+}
+
+.admin-menu { /* .card class is already applied for background/shadow */
+    margin-top: 20px;
+}
+
+.admin-menu h2 {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #34495e;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+.admin-menu ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Center buttons if they don't fill the row */
+}
+
+.admin-menu ul li {
+    /* No specific flex styles needed if just centering a few items */
+}
+
+.admin-menu-button {
+    display: inline-block; /* Changed to inline-block for better flow with gap */
+    padding: 12px 25px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    min-width: 180px; /* Minimum width for buttons */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.admin-menu-button:hover,
+.admin-menu-button:focus {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Form Container (can be similar to .login-form-container or a new style) */
+.form-container { /* .card class already applied for background/shadow */
+    max-width: 650px; /* Adjust as needed */
+    margin: 30px auto;
+    padding: 30px 35px; /* Inherits from .card, can override */
+}
+
+.form-container h2 {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #34495e;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+/* Form Groups and Elements */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"], /* if you change password field type */
+.form-group input[type="email"],
+.form-group select.form-control { /* Add .form-control to select for styling */
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="email"]:focus,
+.form-group select.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    outline: none;
+}
+
+.form-group .form-text.text-muted { /* For helper text like password hint */
+    font-size: 0.85rem;
+    color: #6c757d; /* Bootstrap muted color */
+    display: block;
+    margin-top: 5px;
+}
+
+.form-actions {
+    margin-top: 30px;
+    text-align: center; /* Center the button(s) */
+}
+
+.form-actions .button, /* General button styling from before */
+.form-actions input[type="submit"].button-primary { /* More specific styling for primary form button */
+    /* padding: 12px 30px; */ /* from .button */
+    /* font-size: 1.1rem; */   /* from .button */
+    /* width: auto; */ /* Allow button to size to content or set a min-width */
+    min-width: 150px;
+}
+
+.button.button-primary { /* If you want a distinct primary button color */
+    background-color: #28a745; /* Example: Green */
+    border-color: #28a745;
+}
+.button.button-primary:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+
+/* Error message styling (ensure #erro styles are sufficient from login page) */
+.form-container #erro { /* If #erro is inside .form-container */
+    width: 100%;
+    margin-bottom: 20px;
+    /* Inherits existing #erro styles for border, background, color */
+}
+.form-container #erro ul {
+    list-style-position: inside;
+    padding-left: 0;
+    margin:0;
+}
+.form-container #erro li {
+    font-size: 0.9rem;
+}
+
+/* General form styling (already covered by previous suggestions, but ensuring consistency) */
+.form-container {
+    max-width: 700px; /* Adjusted max-width for project form */
+    margin: 30px auto;
+    padding: 30px 40px;
+}
+
+.form-group textarea {
+    resize: vertical; /* Allow vertical resizing for textareas */
+}
+
+/* Multi-select specific styling */
+.form-group select[multiple] {
+    height: auto; /* Allow height to adjust based on content */
+    min-height: 120px; /* Minimum height for multi-select */
+}
+
+.form-group select[multiple] option {
+    padding: 8px 10px;
+}
+
+/* Table Styling for Project List */
+.table-responsive {
+    overflow-x: auto; /* Enables horizontal scrolling on small screens */
+    margin-top: 20px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse; /* Removes double borders */
+    margin-top: 20px;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Light border for rows */
+}
+
+.data-table th {
+    background-color: #f2f2f2; /* Light background for headers */
+    font-weight: bold;
+    color: #555;
+    white-space: nowrap; /* Prevent wrapping for headers with sort icons */
+}
+
+.data-table th a { /* For sortable column headers */
+    text-decoration: none;
+    color: #555;
+    display: inline-flex; /* Align text and arrow */
+    align-items: center;
+    gap: 5px;
+}
+
+.data-table th a:hover {
+    color: #3498db;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f9f9f9; /* Subtle hover effect on rows */
+}
+
+/* Button styles for actions in tables */
+.button-edit {
+    background-color: #007bff; /* Blue for edit */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9em;
+    margin-right: 5px;
+    transition: background-color 0.2s ease;
+}
+.button-edit:hover {
+    background-color: #0056b3;
+}
+
+.button-delete {
+    background-color: #dc3545; /* Red for delete */
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+}
+.button-delete:hover {
+    background-color: #c82333;
+}
+
+.button-add {
+    background-color: #28a745; /* Green for add new */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1em;
+    margin-left: 10px;
+    transition: background-color 0.2s ease;
+}
+.button-add:hover {
+    background-color: #218838;
+}

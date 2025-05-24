@@ -21,6 +21,6 @@ abstract public class GenericDAO {
         String user     = System.getenv().getOrDefault("MYSQL_USER", "root");
         String password = System.getenv().getOrDefault("MYSQL_ROOT_PASSWORD", "root");
 
-        return DriverManager.getConnection("jdbc:mysql://" + host + ":3306/Sistema", user, password); //
+        return DriverManager.getConnection("jdbc:mysql://" + host + ":3306/Sistema?serverTimezone=America/Sao_Paulo", user, password);
     }
 }

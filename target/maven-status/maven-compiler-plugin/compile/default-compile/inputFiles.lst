@@ -1,4 +1,5 @@
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\enums\SessionStatus.java
+C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\controller\ProjetoController.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\filter\FiltroPermissoes.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\enums\Severity.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\Sessao.java
@@ -14,3 +15,4 @@ C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\dao\Usuar
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\dao\GenericDAO.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\Estrategia.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\Imagem.java
+C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\dao\ProjetoDAO.java
