@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EstrategiaDAO extends GenericDAO {
-
+    // metodo para inserir uma nova estrategia e suas imagens
     public void insert(Estrategia estrategia) {
         String sqlEstrategia = "INSERT INTO Estrategia (nome, descricao, dicas) VALUES (?, ?, ?)";
         String sqlImagem = "INSERT INTO Imagem (estrategia_id, url, descricao) VALUES (?, ?, ?)";
 
         try (Connection conn = this.getConnection()) {
-            conn.setAutoCommit(false); // Start transaction
+            conn.setAutoCommit(false); // Começa
 
             try (PreparedStatement psEstrategia = conn.prepareStatement(sqlEstrategia, Statement.RETURN_GENERATED_KEYS)) {
                 psEstrategia.setString(1, estrategia.getNome());
@@ -30,7 +30,7 @@ public class EstrategiaDAO extends GenericDAO {
                     throw new SQLException("Creating estrategia failed, no ID obtained.");
                 }
             }
-
+             // Insere as imagens associadas (se houver)
             if (estrategia.getImagens() != null && !estrategia.getImagens().isEmpty()) {
                 try (PreparedStatement psImagem = conn.prepareStatement(sqlImagem)) {
                     for (Imagem imagem : estrategia.getImagens()) {
@@ -42,7 +42,7 @@ public class EstrategiaDAO extends GenericDAO {
                     psImagem.executeBatch();
                 }
             }
-            conn.commit(); // Commit transaction
+            conn.commit(); // Confirma a transação
         } catch (SQLException e) {
             // In a real app, check if conn is null or closed before rollback
             // try { if (conn != null) conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
@@ -51,10 +51,9 @@ public class EstrategiaDAO extends GenericDAO {
     }
 
     public List<Estrategia> getAll() {
+        // Método para obter todas as estratégias (sem carregar imagens por padrão)
         List<Estrategia> listaEstrategias = new ArrayList<>();
-        // For simplicity, this getAll won't fetch all images for all strategies initially.
-        // Images can be loaded when viewing a single strategy or on demand.
-        // Or, fetch only the first/primary image if desired for the list view.
+    
         String sql = "SELECT id, nome, descricao, dicas FROM Estrategia ORDER BY nome ASC";
 
         try (Connection conn = this.getConnection();
@@ -67,9 +66,8 @@ public class EstrategiaDAO extends GenericDAO {
                 String descricao = resultSet.getString("descricao");
                 String dicas = resultSet.getString("dicas");
 
-                // Create Estrategia with an empty list of images for now for the general list
+                // Cria estratégia com lista vazia de imagens para otimização
                 Estrategia estrategia = new Estrategia(id, nome, descricao, dicas, new ArrayList<>());
-                // Optionally, you could load a primary image here if needed for the list view.
                 listaEstrategias.add(estrategia);
             }
         } catch (SQLException e) {
@@ -77,7 +75,7 @@ public class EstrategiaDAO extends GenericDAO {
         }
         return listaEstrategias;
     }
-
+    // Método para obter uma estratégia específica com todas suas imagens
     public Estrategia get(int id) {
         Estrategia estrategia = null;
         String sqlEstrategia = "SELECT * FROM Estrategia WHERE id = ?";
@@ -115,17 +113,17 @@ public class EstrategiaDAO extends GenericDAO {
         return estrategia;
     }
 
+    // Método para atualizar uma estratégia e suas imagens
     public void update(Estrategia estrategia) {
         String sqlEstrategia = "UPDATE Estrategia SET nome = ?, descricao = ?, dicas = ? WHERE id = ?";
-        // For images, a common approach: delete all existing images for this strategy and re-insert current ones.
-        // This simplifies handling of added/removed/updated images.
+    
         String sqlDeleteImagens = "DELETE FROM Imagem WHERE estrategia_id = ?";
         String sqlInsertImagem = "INSERT INTO Imagem (estrategia_id, url, descricao) VALUES (?, ?, ?)";
 
         try (Connection conn = this.getConnection()) {
-            conn.setAutoCommit(false); // Start transaction
+            conn.setAutoCommit(false); // Começa a transaçãoo
 
-            // Update Estrategia details
+             // Atualiza dados da estratégia
             try (PreparedStatement psEstrategia = conn.prepareStatement(sqlEstrategia)) {
                 psEstrategia.setString(1, estrategia.getNome());
                 psEstrategia.setString(2, estrategia.getDescricao());
@@ -134,13 +132,13 @@ public class EstrategiaDAO extends GenericDAO {
                 psEstrategia.executeUpdate();
             }
 
-            // Delete old images
+             // Remove imagens antigas
             try (PreparedStatement psDeleteImagens = conn.prepareStatement(sqlDeleteImagens)) {
                 psDeleteImagens.setInt(1, estrategia.getId());
                 psDeleteImagens.executeUpdate();
             }
 
-            // Insert new/current images
+            // Insere novas imagens
             if (estrategia.getImagens() != null && !estrategia.getImagens().isEmpty()) {
                 try (PreparedStatement psInsertImagem = conn.prepareStatement(sqlInsertImagem)) {
                     for (Imagem imagem : estrategia.getImagens()) {
@@ -152,15 +150,15 @@ public class EstrategiaDAO extends GenericDAO {
                     psInsertImagem.executeBatch();
                 }
             }
-            conn.commit(); // Commit transaction
+            conn.commit(); // confirma transação
         } catch (SQLException e) {
-            // try { if (conn != null) conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+        
             throw new RuntimeException("Error updating estrategia: " + e.getMessage(), e);
         }
     }
 
+    // Método para excluir uma estratégia (usa Cascade para imagens)
     public void delete(int id) {
-        // ON DELETE CASCADE for Imagem table will handle associated images
         String sql = "DELETE FROM Estrategia WHERE id = ?";
         try (Connection conn = this.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
