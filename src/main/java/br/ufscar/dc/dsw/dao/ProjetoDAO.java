@@ -17,22 +17,23 @@ public class ProjetoDAO extends GenericDAO {
         try (Connection conn = this.getConnection();
              PreparedStatement statementProjeto = conn.prepareStatement(sqlProjeto, Statement.RETURN_GENERATED_KEYS)) {
 
-            conn.setAutoCommit(false); // Start transaction
+            conn.setAutoCommit(false); // Começa transação
 
             statementProjeto.setString(1, projeto.getNome());
             statementProjeto.setString(2, projeto.getDescricao());
             statementProjeto.setTimestamp(3, Timestamp.valueOf(projeto.getCriadoEm()));
             statementProjeto.executeUpdate();
 
+             // Recupera o ID gerado automaticamente
             ResultSet rs = statementProjeto.getGeneratedKeys();
             if (rs.next()) {
                 projeto.setId(rs.getInt(1));
             } else {
-                conn.rollback(); // Rollback if project ID not generated
+                conn.rollback(); // Rollback se o ID do projeto nao for gerado
                 throw new SQLException("Creating project failed, no ID obtained.");
             }
 
-            // Insert associations into Projeto_Usuario
+            // Associa usuários ao projeto na tabela Projeto_Usuario
             if (projeto.getUsuarios() != null && !projeto.getUsuarios().isEmpty()) {
                 try (PreparedStatement statementProjetoUsuario = conn.prepareStatement(sqlProjetoUsuario)) {
                     for (Usuario usuario : projeto.getUsuarios()) {
@@ -43,25 +44,27 @@ public class ProjetoDAO extends GenericDAO {
                     statementProjetoUsuario.executeBatch();
                 }
             }
-            conn.commit(); // Commit transaction
+            conn.commit(); // Confirma transação
         } catch (SQLException e) {
-            // Consider rolling back in a catch block if conn is still valid and autoCommit was false
+ 
             throw new RuntimeException("Error inserting project: " + e.getMessage(), e);
         }
     }
-
+    
+    // Método para obter todos projetos ordenados
     public List<Projeto> getAll(String sortBy, String sortOrder) {
         List<Projeto> listaProjetos = new ArrayList<>();
-        // Basic sort, can be expanded
-        String orderByClause = " ORDER BY p.nome ASC"; // Default sort
+    
+        String orderByClause = " ORDER BY p.nome ASC"; // Ordenação padrão
+         // Valida e constrói cláusula ORDER BY dinâmica
         if (sortBy != null && !sortBy.isEmpty()) {
-            String column = "p.nome"; // default column
+            String column = "p.nome"; 
             if ("nome".equalsIgnoreCase(sortBy)) {
                 column = "p.nome";
             } else if ("criadoEm".equalsIgnoreCase(sortBy)) {
                 column = "p.criadoEm";
             }
-            // Validate sortOrder
+             // Valida direção da ordenação
             String order = "ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder) ? sortOrder.toUpperCase() : "ASC";
             orderByClause = " ORDER BY " + column + " " + order;
         }
@@ -73,15 +76,15 @@ public class ProjetoDAO extends GenericDAO {
              Statement statement = conn.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
+            // Processa cada registro retornado
             while (resultSet.next()) {
                 int id = resultSet.getInt("projeto_id");
                 String nome = resultSet.getString("projeto_nome");
                 String descricao = resultSet.getString("projeto_descricao");
                 LocalDateTime criadoEm = resultSet.getTimestamp("projeto_criadoEm").toLocalDateTime();
 
-                // Users for each project would need a separate query or a more complex JOIN + mapping logic
-                // For now, keeping it simple for the list view. Detailed view can load users.
-                Projeto projeto = new Projeto(id, nome, descricao, criadoEm, new ArrayList<>()); // Empty user list for now
+                 // Cria projeto sem lista de usuários para otimização
+                Projeto projeto = new Projeto(id, nome, descricao, criadoEm, new ArrayList<>()); 
                 listaProjetos.add(projeto);
             }
         } catch (SQLException e) {
@@ -116,7 +119,7 @@ public class ProjetoDAO extends GenericDAO {
                                         rsUsuarios.getLong("id"),
                                         rsUsuarios.getString("nome"),
                                         rsUsuarios.getString("login"),
-                                        rsUsuarios.getString("senha"), // Be mindful of exposing passwords
+                                        rsUsuarios.getString("senha"), 
                                         br.ufscar.dc.dsw.domain.enums.Role.valueOf(rsUsuarios.getString("role"))
                                 ));
                             }
@@ -133,12 +136,11 @@ public class ProjetoDAO extends GenericDAO {
 
     public void update(Projeto projeto) {
         String sqlProjeto = "UPDATE Projeto SET nome = ?, descricao = ? WHERE id = ?";
-        // For updating users, a common strategy is to delete all existing associations and re-insert current ones
         String sqlDeleteUsuarios = "DELETE FROM Projeto_Usuario WHERE projeto_id = ?";
         String sqlInsertUsuario = "INSERT INTO Projeto_Usuario (projeto_id, usuario_id) VALUES (?, ?)";
 
         try (Connection conn = this.getConnection()) {
-            conn.setAutoCommit(false); // Start transaction
+            conn.setAutoCommit(false); // Começa transação
 
             try (PreparedStatement psProjeto = conn.prepareStatement(sqlProjeto)) {
                 psProjeto.setString(1, projeto.getNome());
@@ -162,15 +164,14 @@ public class ProjetoDAO extends GenericDAO {
                     psInsertUsuario.executeBatch();
                 }
             }
-            conn.commit(); // Commit transaction
+            conn.commit(); // Confirma transação
         } catch (SQLException e) {
-            // Consider rolling back
             throw new RuntimeException("Error updating project: " + e.getMessage(), e);
         }
     }
 
+    // Método para excluir um projeto
     public void delete(int id) {
-        // ON DELETE CASCADE for Projeto_Usuario will handle associated users
         String sql = "DELETE FROM Projeto WHERE id = ?";
         try (Connection conn = this.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -181,6 +182,7 @@ public class ProjetoDAO extends GenericDAO {
         }
     }
 
+    // Método para obter projetos associados a um usuário específico
     public List<Projeto> getProjetosByUsuarioId(Long usuarioId) {
         List<Projeto> listaProjetos = new ArrayList<>();
         String sql = "SELECT p.id, p.nome, p.descricao, p.criadoEm " +
@@ -195,14 +197,13 @@ public class ProjetoDAO extends GenericDAO {
             ps.setLong(1, usuarioId);
             ResultSet rs = ps.executeQuery();
 
+             // Processa cada projeto do usuário
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nome = rs.getString("nome");
                 String descricao = rs.getString("descricao");
                 LocalDateTime criadoEm = rs.getTimestamp("criadoEm").toLocalDateTime();
-                // For the dashboard, we might not need the full user list for each project here.
-                // If needed, another query or modification to this one would be required.
-                Projeto projeto = new Projeto(id, nome, descricao, criadoEm, new ArrayList<>()); // Pass empty user list for now
+                Projeto projeto = new Projeto(id, nome, descricao, criadoEm, new ArrayList<>()); 
                 listaProjetos.add(projeto);
             }
             rs.close();
