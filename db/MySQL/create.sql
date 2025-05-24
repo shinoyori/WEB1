@@ -48,3 +48,20 @@ CREATE TABLE Imagem (
                         PRIMARY KEY (id),
                         FOREIGN KEY (estrategia_id) REFERENCES Estrategia(id) ON DELETE CASCADE
 );
+
+CREATE TABLE Sessao (
+                        id INT NOT NULL AUTO_INCREMENT,
+                        titulo VARCHAR(255) NOT NULL,
+                        descricao TEXT,
+                        testador_id BIGINT NOT NULL,
+                        estrategia_id INT NOT NULL,
+                        projeto_id INT NOT NULL, -- <<< NEW COLUMN
+                        status ENUM('CRIADA', 'EM_ANDAMENTO', 'FINALIZADA', 'CANCELADA') NOT NULL DEFAULT 'CRIADA',
+                        criadoEm DATETIME NOT NULL,
+                        inicioEm DATETIME NULL,
+                        finalizadoEm DATETIME NULL,
+                        PRIMARY KEY (id),
+                        FOREIGN KEY (testador_id) REFERENCES Usuario(id) ON DELETE RESTRICT, -- Or ON DELETE SET NULL if appropriate
+                        FOREIGN KEY (estrategia_id) REFERENCES Estrategia(id) ON DELETE RESTRICT, -- Or ON DELETE SET NULL
+                        FOREIGN KEY (projeto_id) REFERENCES Projeto(id) ON DELETE CASCADE -- If a project is deleted, its sessions are deleted
+);

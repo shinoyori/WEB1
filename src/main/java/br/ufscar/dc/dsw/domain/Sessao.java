@@ -10,13 +10,19 @@ public class Sessao {
     private String titulo;
     private Usuario testador;
     private Estrategia estrategia;
+    private Projeto projeto;
     private String descricao;
     private SessionStatus status;
     private LocalDateTime criadoEm;
     private LocalDateTime inicioEm;
     private LocalDateTime finalizadoEm;
 
-    public Sessao() {}
+    public Sessao() {
+        this.criadoEm = LocalDateTime.now();
+        this.status = SessionStatus.CRIADA;
+    }
+
+    public Sessao(String titulo, Usuario testador, Estrategia estrategia, Projeto projeto, String descricao, SessionStatus status, LocalDateTime criadoEm, LocalDateTime inicioEm, LocalDateTime finalizadoEm) {}
 
     public Sessao(String titulo, Usuario testador, Estrategia estrategia, String descricao,
                   SessionStatus status, LocalDateTime criadoEm, LocalDateTime inicioEm, LocalDateTime finalizadoEm) {
@@ -25,9 +31,16 @@ public class Sessao {
         this.estrategia = estrategia;
         this.descricao = descricao;
         this.status = status;
+        this.projeto = projeto;
         this.criadoEm = criadoEm;
         this.inicioEm = inicioEm;
         this.finalizadoEm = finalizadoEm;
+    }
+
+    public Sessao(Integer id, String titulo, Usuario testador, Estrategia estrategia, Projeto projeto, String descricao,
+                  SessionStatus status, LocalDateTime criadoEm, LocalDateTime inicioEm, LocalDateTime finalizadoEm) {
+        this(titulo, testador, estrategia, projeto, descricao, status, criadoEm, inicioEm, finalizadoEm);
+        this.id = id;
     }
 
     public Integer getId() {
@@ -91,5 +104,13 @@ public class Sessao {
     }
     public void setFinalizadoEm(LocalDateTime finalizadoEm) {
         this.finalizadoEm = finalizadoEm;
+    }
+
+    public Projeto getProjeto() {
+        return projeto;
+    }
+
+    public void setProjeto(Projeto projeto) {
+        this.projeto = projeto;
     }
 }

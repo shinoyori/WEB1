@@ -1,10 +1,10 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %> <%-- Updated URI --%>
-<%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %> <%-- Updated URI --%>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
-<fmt:bundle basename="message"> <%-- This should still work with jakarta.tags.fmt --%>
+<fmt:bundle basename="message">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,8 +61,8 @@
                 <fmt:message key="project.name" />
                 <c:if test="${currentSortBy == 'nome'}">
                   <c:choose>
-                    <c:when test="${currentSortOrder == 'asc'}">&#9650;</c:when> <%-- Up arrow --%>
-                    <c:otherwise>&#9660;</c:otherwise> <%-- Down arrow --%>
+                    <c:when test="${currentSortOrder == 'asc'}">&#9650;</c:when>
+                    <c:otherwise>&#9660;</c:otherwise>
                   </c:choose>
                 </c:if>
               </a>
@@ -80,9 +80,7 @@
               </a>
             </th>
             <th><fmt:message key="project.assigned.users" /></th>
-            <c:if test="${sessionScope.usuarioLogado.tipo == 'ADMIN'}">
-              <th><fmt:message key="actions.link" /></th>
-            </c:if>
+            <th><fmt:message key="actions.link" /></th> <%-- Combined actions column --%>
           </tr>
           </thead>
           <tbody>
@@ -93,35 +91,18 @@
               <td><c:out value="${projeto.descricao}" /></td>
               <%@ page import="java.time.format.DateTimeFormatter" %>
               <%@ page import="java.time.LocalDateTime" %>
-                <%-- ... other imports and page directives ... --%>
-
-                <%-- Inside your <c:forEach var="projeto" items="${requestScope.listaProjetos}"> loop --%>
               <td>
                 <%
-                  // Make sure 'projeto' is the current iteration variable from your c:forEach
-                  // And that projeto.getCriadoEm() returns a LocalDateTime object
-                  Object criadoEmObj = pageContext.findAttribute("projeto_criadoEm"); // A way to access EL variable if needed, or directly use from 'projeto' if accessible
-                  // Simpler: Assuming 'projeto' is directly accessible here as a scriptlet variable if it's set as an attribute
-                  // This part can be tricky with scriptlets interacting with JSTL vars.
-                  // Let's assume 'projeto' is an object available to scriptlets,
-                  // or you'd need to pull its 'criadoEm' property more explicitly.
-
-                  // Assuming 'projeto' is an instance of your Projeto domain object
-                  // and it is available in the scope of the scriptlet
-                  // THIS IS THE MORE LIKELY WAY IT WOULD BE ACCESSED IN THIS CONTEXT
-                  // WHEN 'projeto' IS THE var IN A JSTL LOOP
                   br.ufscar.dc.dsw.domain.Projeto currentProjeto = (br.ufscar.dc.dsw.domain.Projeto) pageContext.findAttribute("projeto");
                   if (currentProjeto != null && currentProjeto.getCriadoEm() != null) {
                     LocalDateTime criadoEmDate = currentProjeto.getCriadoEm();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                     out.print(criadoEmDate.format(formatter));
                   } else {
-                    out.print(""); // Or N/A, or handle as appropriate
+                    out.print("");
                   }
                 %>
               </td>
-
-
               <td>
                 <c:choose>
                   <c:when test="${not empty projeto.usuarios}">
@@ -134,16 +115,20 @@
                   </c:otherwise>
                 </c:choose>
               </td>
-              <c:if test="${sessionScope.usuarioLogado.tipo == 'ADMIN'}">
-                <td>
+              <td>
+                  <%-- Link to View Test Sessions (R9) --%>
+                <a href="${pageContext.request.contextPath}/sessoes/listaPorProjeto?projetoId=${projeto.id}" class="button button-details">
+                  <fmt:message key="sessions.view.for.project" /> <%-- New i18n key needed --%>
+                </a>
+                <c:if test="${sessionScope.usuarioLogado.tipo == 'ADMIN'}">
                   <a href="${pageContext.request.contextPath}/projetos/edicao?id=${projeto.id}" class="button button-edit">
                     <fmt:message key="projects.update" />
                   </a>
                   <button type="button" onclick="confirmRemoval(${projeto.id})" class="button button-delete">
                     <fmt:message key="projects.delete" />
                   </button>
-                </td>
-              </c:if>
+                </c:if>
+              </td>
             </tr>
           </c:forEach>
           <c:if test="${empty requestScope.listaProjetos}">
