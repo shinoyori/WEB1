@@ -1,8 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
+<%@ taglib uri="jakarta.tags.core" prefix="c" %> <%-- Updated URI --%>
+<%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %> <%-- Updated URI --%>
 <!DOCTYPE html>
 <html lang="${pageContext.response.locale.language}"> <%-- Add language attribute --%>
 <fmt:bundle basename="message">
