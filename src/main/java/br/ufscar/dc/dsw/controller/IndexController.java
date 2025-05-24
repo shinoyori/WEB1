@@ -107,7 +107,8 @@ public class IndexController extends HttpServlet {
         if (usuario.getTipo() == Role.ADMIN) {
             response.sendRedirect(request.getContextPath() + "/admin/");
         } else if (usuario.getTipo() == Role.TESTER) {
-            response.sendRedirect(request.getContextPath() + "/usuarios/");
+            // MODIFIED LINE: Redirect TESTER to their dashboard
+            response.sendRedirect(request.getContextPath() + "/tester/dashboard");
         } else { // GUEST
             response.sendRedirect(request.getContextPath() + "/home.jsp");
         }
