@@ -31,3 +31,20 @@ CREATE TABLE Projeto_Usuario (
                                  FOREIGN KEY (projeto_id) REFERENCES Projeto(id) ON DELETE CASCADE,
                                  FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE
 );
+
+CREATE TABLE Estrategia (
+                            id INT NOT NULL AUTO_INCREMENT,
+                            nome VARCHAR(255) NOT NULL,
+                            descricao TEXT,
+                            dicas TEXT,
+                            PRIMARY KEY (id)
+);
+
+CREATE TABLE Imagem (
+                        id INT NOT NULL AUTO_INCREMENT,
+                        estrategia_id INT NOT NULL,
+                        url VARCHAR(1024) NOT NULL, -- Increased URL length
+                        descricao VARCHAR(255),
+                        PRIMARY KEY (id),
+                        FOREIGN KEY (estrategia_id) REFERENCES Estrategia(id) ON DELETE CASCADE
+);

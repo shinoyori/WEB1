@@ -1,9 +1,11 @@
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\enums\SessionStatus.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\controller\ProjetoController.java
+C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\dao\EstrategiaDAO.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\filter\FiltroPermissoes.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\enums\Severity.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\Sessao.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\util\Erro.java
+C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\controller\EstrategiaController.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\enums\Role.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\Bug.java
 C:\Users\Ayla\Desktop\Faculdade\DSW\AA1\src\main\java\br\ufscar\dc\dsw\domain\Usuario.java
