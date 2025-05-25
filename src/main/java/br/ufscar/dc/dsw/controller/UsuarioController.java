@@ -52,10 +52,8 @@ public class UsuarioController extends HttpServlet {
             action = "";
         }
 
-        //apenas ADMIN pode acessar
         boolean apenasAdmin = List.of("/cadastro", "/insercao", "/edicao", "/atualizacao", "/remocao").contains(action);
 
-        //se não for ADMIN e tentar acessar algo restrito
         if (apenasAdmin && !usuario.getTipo().hasAccess(Role.ADMIN)) {
             erros.add("Acesso não autorizado!");
             erros.add("Apenas administradores podem acessar essa funcionalidade.");

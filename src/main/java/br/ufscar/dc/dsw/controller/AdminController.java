@@ -29,7 +29,7 @@ public class AdminController extends HttpServlet {
     private EstrategiaDAO estrategiaDAO;
 
     @Override
-    public void init() throws ServletException { //CORRIGIDO AQUI: foi adicionado "throws ServletException"
+    public void init() throws ServletException {
         super.init();
         estrategiaDAO = new EstrategiaDAO();
     }

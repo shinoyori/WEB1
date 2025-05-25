@@ -108,12 +108,6 @@
       </c:if>
     </div>
   </main>
-
-  <footer class="page-footer">
-    <div class="container">
-      <p>&copy; ${sessionScope.year != null ? sessionScope.year : 2024} Your Company Name.</p>
-    </div>
-  </footer>
   </body>
 </fmt:bundle>
 </html>

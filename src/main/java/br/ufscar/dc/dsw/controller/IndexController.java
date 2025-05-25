@@ -13,7 +13,7 @@ import br.ufscar.dc.dsw.domain.enums.Role;
 import br.ufscar.dc.dsw.util.Erro;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "Index", urlPatterns = { "/", "/home", "/logout.jsp", "/login" })
+@WebServlet(name = "Index", urlPatterns = { "/home", "/logout.jsp", "/login" })
 public class IndexController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -30,13 +30,20 @@ public class IndexController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uri = request.getRequestURI();
-        String contextPath = request.getContextPath(); // Ex: /AA1
+        String contextPath = request.getContextPath();
 
         String path = uri.substring(contextPath.length());
         if (path.isEmpty()) {
             path = "/";
         }
 
+        if (path.equals("/")) {
+            Usuario usuarioLogado = (Usuario) request.getSession().getAttribute("usuarioLogado");
+            request.setAttribute("usuarioLogado", usuarioLogado);
+            RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
+            rd.forward(request, response);
+            return;
+        }
 
         if (path.equals("/logout.jsp")) {
             logout(request, response);
@@ -54,10 +61,7 @@ public class IndexController extends HttpServlet {
             return;
         }
 
-        Usuario usuarioLogado = (Usuario) request.getSession().getAttribute("usuarioLogado");
-        request.setAttribute("usuarioLogado", usuarioLogado);
-        RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
-        rd.forward(request, response);
+        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Página não encontrada.");
     }
 
     private void processLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

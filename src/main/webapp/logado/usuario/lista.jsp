@@ -19,6 +19,7 @@
             <div class="header-content">
                 <div class="site-title">
                     <h1><fmt:message key="users.list" /></h1>
+
                 </div>
                 <div class="login-logout-nav">
                     <span><fmt:message key="welcome.message" /> ${sessionScope.usuarioLogado.nome}!</span>
@@ -81,12 +82,6 @@
             </table>
         </div>
     </main>
-
-    <footer class="page-footer">
-        <div class="container">
-            <p>&copy; ${sessionScope.year != null ? sessionScope.year : 2024} Your Company Name.</p>
-        </div>
-    </footer>
     </body>
 </fmt:bundle>
 </html>

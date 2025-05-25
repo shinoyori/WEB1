@@ -30,17 +30,20 @@ public class FiltroPermissoes implements Filter {
         String contextPath = request.getContextPath();
         String path = uri.substring(contextPath.length());
 
+        if (path.isEmpty()) {
+            path = "/";
+        }
 
-        boolean recursoPublico = path.equals("/") ||
-        path.equals("/home") ||
-                path.equals("/login") ||
-                path.equals("/login.jsp") ||
-                path.equals("/home.jsp") ||
-                path.equals("/erro.jsp") ||
-                path.equals("/noAuth.jsp") ||
-                path.startsWith("/estrategias") ||
-                uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".png") ||
-                uri.endsWith(".ico") || uri.endsWith(".jpg") || uri.endsWith(".jpeg") || uri.endsWith(".gif");
+        boolean recursoPublico =
+                path.equals("/") ||
+                        path.equals("/login") ||
+                        path.equals("/login.jsp") ||
+                        path.equals("/home.jsp") ||
+                        path.equals("/erro.jsp") ||
+                        path.equals("/noAuth.jsp") ||
+                        path.startsWith("/estrategias") ||
+                        uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".png") ||
+                        uri.endsWith(".ico") || uri.endsWith(".jpg") || uri.endsWith(".jpeg") || uri.endsWith(".gif");
 
 
         if (recursoPublico) {
@@ -52,7 +55,7 @@ public class FiltroPermissoes implements Filter {
         Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuarioLogado") : null;
 
         if (usuario == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
 

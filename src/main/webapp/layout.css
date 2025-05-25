@@ -8,10 +8,7 @@
 html {
     font-size: 16px; /* Base font size */
     line-height: 1.6;
-    font-family: Arial, sans-serif; /* Basic fallback font */
-    /* Consider a more modern font stack:
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    */
+    font-family: "Roboto Light", sans-serif;
 }
 
 body {
