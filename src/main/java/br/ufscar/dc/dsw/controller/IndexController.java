@@ -13,18 +13,16 @@ import br.ufscar.dc.dsw.domain.enums.Role;
 import br.ufscar.dc.dsw.util.Erro;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "Index", urlPatterns = { "/home", "/logout.jsp", "/login" }) // Adicionado "/login" para centralizar o POST do login
+@WebServlet(name = "Index", urlPatterns = { "/", "/home", "/logout.jsp", "/login" })
 public class IndexController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //se o POST veio do formulário de login (bOK não é null), processa o login
         if (request.getParameter("bOK") != null) {
             processLogin(request, response);
         } else {
-            //outros POSTs para a raiz (se houver) podem ser tratados aqui ou rejeitados
             response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "Método POST não permitido para este caminho sem parâmetros de login.");
         }
     }
@@ -32,31 +30,33 @@ public class IndexController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uri = request.getRequestURI();
+        String contextPath = request.getContextPath(); // Ex: /AA1
 
-        //verifica se a URL é para logout
-        if (uri.endsWith("/logout.jsp")) { // Ou if (request.getServletPath().equals("/logout.jsp"))
+        String path = uri.substring(contextPath.length());
+        if (path.isEmpty()) {
+            path = "/";
+        }
+
+
+        if (path.equals("/logout.jsp")) {
             logout(request, response);
             return;
         }
 
-        //verifica se a URL é explicitamente para a página de login
-        if (uri.endsWith("/login") || uri.endsWith("/login.jsp")) {
-            // Se o usuário já estiver logado, redireciona para a página apropriada
+        if (path.equals("/login") || path.equals("/login.jsp")) {
             Usuario usuarioLogado = (Usuario) request.getSession().getAttribute("usuarioLogado");
             if (usuarioLogado != null) {
                 redirecionaPorRole(request, response, usuarioLogado);
                 return;
             }
-            //se não estiver logado e explicitamente pediu login, encaminha para a página de login
             RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
             rd.forward(request, response);
             return;
         }
 
-        //para qualquer outra requisição (ex: "/"), trata como a home page pública
         Usuario usuarioLogado = (Usuario) request.getSession().getAttribute("usuarioLogado");
-        request.setAttribute("usuarioLogado", usuarioLogado); // Passa o usuarioLogado para a JSP para exibir o nome
-        RequestDispatcher rd = request.getRequestDispatcher("/home.jsp"); // Encaminha para a nova home page pública
+        request.setAttribute("usuarioLogado", usuarioLogado);
+        RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
         rd.forward(request, response);
     }
 
@@ -107,9 +107,8 @@ public class IndexController extends HttpServlet {
         if (usuario.getTipo() == Role.ADMIN) {
             response.sendRedirect(request.getContextPath() + "/admin/");
         } else if (usuario.getTipo() == Role.TESTER) {
-            // MODIFIED LINE: Redirect TESTER to their dashboard
             response.sendRedirect(request.getContextPath() + "/tester/dashboard");
-        } else { // GUEST
+        } else {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
         }
     }

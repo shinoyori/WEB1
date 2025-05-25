@@ -43,7 +43,7 @@ public class UsuarioController extends HttpServlet {
         Erro erros = new Erro();
 
         if (usuario == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp"); // Redirecionamento aqui
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
@@ -64,8 +64,8 @@ public class UsuarioController extends HttpServlet {
             return;
         }
 
-        //se for GUEST, não tem permissão pra nada aqui
-        if (!usuario.getTipo().hasAccess(Role.TESTER)) { // <-- Problema: GUEST não deveria acessar nem a lista?
+
+        if (!usuario.getTipo().hasAccess(Role.TESTER)) {
             erros.add("Acesso não autorizado!");
             erros.add("Você precisa estar logado como testador ou administrador.");
             request.setAttribute("mensagens", erros);
@@ -90,7 +90,7 @@ public class UsuarioController extends HttpServlet {
                 case "/atualizacao":
                     atualize(request, response);
                     break;
-                default: // /lista ou ""
+                default:
                     lista(request, response);
                     break;
             }
@@ -109,7 +109,7 @@ public class UsuarioController extends HttpServlet {
 
     private void apresentaFormCadastro(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/usuario/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/admin/formulario.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -117,7 +117,7 @@ public class UsuarioController extends HttpServlet {
             throws ServletException, IOException {
         Long id = Long.parseLong(request.getParameter("id"));
         Usuario usuario = dao.get(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/usuario/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/admin/formulario.jsp");
         request.setAttribute("usuario", usuario);
         dispatcher.forward(request, response);
     }
@@ -143,7 +143,6 @@ public class UsuarioController extends HttpServlet {
 
         Long id = Long.parseLong(request.getParameter("id"));
         String nome = request.getParameter("nome");
-        // String email = request.getParameter("email");
         String login = request.getParameter("login");
         String senha = request.getParameter("senha");
         Role tipo = Role.valueOf(request.getParameter("tipo"));
@@ -153,6 +152,7 @@ public class UsuarioController extends HttpServlet {
 
         response.sendRedirect("lista");
     }
+
 
     private void remove(HttpServletRequest request, HttpServletResponse response)
             throws IOException {

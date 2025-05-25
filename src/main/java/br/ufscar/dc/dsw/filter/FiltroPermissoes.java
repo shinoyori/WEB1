@@ -27,18 +27,20 @@ public class FiltroPermissoes implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
 
         String uri = request.getRequestURI();
-        HttpSession session = request.getSession(false);
-        Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuarioLogado") : null;
+        String contextPath = request.getContextPath();
+        String path = uri.substring(contextPath.length());
 
-        // Lista de recursos públicos que não exigem autenticação
-        boolean recursoPublico = uri.contains("/login") || // O controller /login agora trata o login.jsp e o POST do login
-                uri.contains("/erro.jsp") ||
-                uri.contains("/noAuth.jsp") ||
-                uri.contains("/estrategias") ||
+
+        boolean recursoPublico = path.equals("/") ||
+        path.equals("/home") ||
+                path.equals("/login") ||
+                path.equals("/login.jsp") ||
+                path.equals("/home.jsp") ||
+                path.equals("/erro.jsp") ||
+                path.equals("/noAuth.jsp") ||
+                path.startsWith("/estrategias") ||
                 uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".png") ||
-                uri.equals(request.getContextPath() + "/") || // URL raiz
-                uri.equals(request.getContextPath() + "/index.jsp") || // index.jsp (se usado como redirect ou link)
-                uri.equals(request.getContextPath() + "/home.jsp"); // A nova home page pública
+                uri.endsWith(".ico") || uri.endsWith(".jpg") || uri.endsWith(".jpeg") || uri.endsWith(".gif");
 
 
         if (recursoPublico) {
@@ -46,20 +48,18 @@ public class FiltroPermissoes implements Filter {
             return;
         }
 
-        //se o usuário não está logado e o recurso não é público, redireciona para a home page ou login
+        HttpSession session = request.getSession(false);
+        Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuarioLogado") : null;
+
         if (usuario == null) {
-            // Pode redirecionar para a home page pública ou para o login
-            response.sendRedirect(request.getContextPath() + "/login.jsp"); // Redireciona para o login.jsp caso não logado
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
-        //ADMIN: tem acesso a tudo
         if (usuario.getTipo() == Role.ADMIN) {
-            chain.doFilter(req, res); // ADMIN sempre pode acessar tudo
+            chain.doFilter(req, res);
             return;
         }
-
-        //TESTER: Não pode acessar áreas de ADMIN
         if (usuario.getTipo() == Role.TESTER) {
             if (uri.contains("/admin") || uri.contains("/usuarios/cadastro") ||
                     uri.contains("/usuarios/insercao") || uri.contains("/usuarios/edicao") ||
@@ -68,16 +68,14 @@ public class FiltroPermissoes implements Filter {
                 redirecionaNaoAutorizado(request, response);
                 return;
             }
-            chain.doFilter(req, res); // TESTER pode acessar o restante
+            chain.doFilter(req, res);
             return;
         }
-
-        //GUEST: Apenas pode acessar recursos públicos
-        //se chegou aqui, é GUEST e o recurso não é público, então bloqueia
         if (usuario.getTipo() == Role.GUEST) {
-            redirecionaNaoAutorizado(request, response); // GUEST não pode acessar nada além dos recursos públicos
+            redirecionaNaoAutorizado(request, response);
             return;
         }
+        chain.doFilter(req, res);
     }
 
     private void redirecionaNaoAutorizado(HttpServletRequest request, HttpServletResponse response)

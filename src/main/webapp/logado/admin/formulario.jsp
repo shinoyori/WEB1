@@ -38,8 +38,8 @@
 
     <main class="page-content">
         <div class="container">
-            <div class="form-container card"> <%-- Reusing .card and a new .form-container --%>
-                <h2> <%-- Title inside the form container --%>
+            <div class="form-container card">
+                <h2>
                     <c:choose>
                         <c:when test="${usuario != null}"><fmt:message key="users.update" /></c:when>
                         <c:otherwise><fmt:message key="users.create" /></c:otherwise>

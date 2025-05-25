@@ -1,9 +1,8 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %> <%-- Updated URI --%>
-<%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %> <%-- Updated URI --%>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 
-<%-- This file now outputs divs instead of table rows/cells --%>
 <c:if test="${usuario != null}">
     <input type="hidden" name="id" value="<c:out value='${usuario.id}' />" />
 </c:if>
@@ -23,7 +22,6 @@
     <input type="text" id="senha" name="senha" <c:if test="${usuario == null}">required</c:if> />
     <c:if test="${usuario != null}">
         <small class="form-text text-muted">(<fmt:message key="user.password.update.hint" />)</small>
-        <%-- Assuming user.password.update.hint = "Leave blank to keep current password" --%>
     </c:if>
 </div>
 
