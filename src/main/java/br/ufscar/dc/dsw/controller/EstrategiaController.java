@@ -2,7 +2,7 @@ package br.ufscar.dc.dsw.controller;
 
 import br.ufscar.dc.dsw.dao.EstrategiaDAO;
 import br.ufscar.dc.dsw.domain.Estrategia;
-import br.ufscar.dc.dsw.util.Erro; // Assuming you have this utility for error messages
+import br.ufscar.dc.dsw.util.Erro; 
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -18,26 +18,27 @@ import java.util.List;
 public class EstrategiaController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private EstrategiaDAO estrategiaDAO;
+    private EstrategiaDAO estrategiaDAO; // Objeto DAO para acesso aos dados das estratégias
 
+    // cria instância do DAO
     @Override
     public void init() {
         estrategiaDAO = new EstrategiaDAO();
     }
-
+    // Trata requisicoes POST repassando para GET 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request, response);
     }
-
+    // Metodo principal para tratamento de requisições GET
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String action = request.getPathInfo();
         if (action == null) {
-            action = "/"; // Default to listing
+            action = "/";  //ação padrão se não houver path 
         }
 
         try {
@@ -45,13 +46,13 @@ public class EstrategiaController extends HttpServlet {
                 case "/detalhes":
                     mostraDetalhes(request, response);
                     break;
-                case "/": // Root path for /estrategias/
-                case "/lista": // Explicit path for listing
+                case "/": // caminho raiz
+                case "/lista": // caminho explicito pra listagem
                     listaPublica(request, response);
                     break;
                 default:
-                    // Optionally, handle unknown paths (e.g., show 404 or redirect to list)
-                    listaPublica(request, response); // Default to list for unknown actions
+                    // Trata caminhos desconhecidos redirecionando para listagem
+                    listaPublica(request, response);
                     break;
             }
         } catch (RuntimeException | IOException | ServletException e) {
@@ -65,7 +66,8 @@ public class EstrategiaController extends HttpServlet {
 
     private void listaPublica(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Estrategia> listaEstrategias = estrategiaDAO.getAll(); // DAO fetches all strategies
+        List<Estrategia> listaEstrategias = estrategiaDAO.getAll();   // Obtém todas as estratégias do banco de dados
+         // Define atributo para a view e redireciona para página de listagem
         request.setAttribute("listaEstrategias", listaEstrategias);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/publico/estrategia/lista.jsp");
         dispatcher.forward(request, response);
@@ -76,7 +78,8 @@ public class EstrategiaController extends HttpServlet {
         Erro erros = new Erro();
         String idParam = request.getParameter("id");
         int id = -1;
-
+        
+        // Validação do parâmetro ID
         if (idParam != null && !idParam.isEmpty()) {
             try {
                 id = Integer.parseInt(idParam);
@@ -89,19 +92,20 @@ public class EstrategiaController extends HttpServlet {
 
         if (erros.isExisteErros()) {
             request.setAttribute("mensagens", erros);
-            // Forward to an error display on the list page or a general error page
-            listaPublica(request, response); // Or redirect to an error page
+            // Lida com erros, exibe a listagem com mensagens
+            listaPublica(request, response); 
             return;
         }
-
-        Estrategia estrategia = estrategiaDAO.get(id); // DAO fetches strategy by ID with images
+         // Busca estratégia no banco de dados
+        Estrategia estrategia = estrategiaDAO.get(id);
+        // Verifica se estratégia foi encontrada
         if (estrategia == null) {
             erros.add("Estratégia não encontrada.");
             request.setAttribute("mensagens", erros);
-            listaPublica(request, response); // Or redirect to an error page
+            listaPublica(request, response); 
             return;
         }
-
+        // Define atributo para a view e redireciona para página de detalhes
         request.setAttribute("estrategia", estrategia);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/publico/estrategia/detalhes.jsp");
         dispatcher.forward(request, response);
