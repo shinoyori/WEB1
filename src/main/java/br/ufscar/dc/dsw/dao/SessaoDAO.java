@@ -4,7 +4,7 @@ import br.ufscar.dc.dsw.domain.Estrategia;
 import br.ufscar.dc.dsw.domain.Projeto;
 import br.ufscar.dc.dsw.domain.Sessao;
 import br.ufscar.dc.dsw.domain.Usuario;
-import br.ufscar.dc.dsw.domain.enums.Role;
+// Role enum is not directly used in this DAO, but SessionStatus is.
 import br.ufscar.dc.dsw.domain.enums.SessionStatus;
 
 import java.sql.*;
@@ -14,7 +14,6 @@ import java.util.List;
 
 public class SessaoDAO extends GenericDAO {
 
-    // Dependencias de outros DAOS pra carregar relações
     private final UsuarioDAO usuarioDAO;
     private final EstrategiaDAO estrategiaDAO;
     private final ProjetoDAO projetoDAO;
@@ -34,6 +33,8 @@ public class SessaoDAO extends GenericDAO {
 
             ps.setString(1, sessao.getTitulo());
             ps.setString(2, sessao.getDescricao());
+            // Ensure sessao.getTestador(), getEstrategia(), getProjeto() are not null before calling getId()
+            // This check should ideally happen in the controller or service layer before calling DAO.
             ps.setLong(3, sessao.getTestador().getId());
             ps.setInt(4, sessao.getEstrategia().getId());
             ps.setInt(5, sessao.getProjeto().getId());
@@ -108,7 +109,8 @@ public class SessaoDAO extends GenericDAO {
             if (rs.next()) {
                 sessao = mapResultSetToSessao(rs);
             }
-            rs.close();
+            // It's good practice to close ResultSet, though try-with-resources handles PreparedStatement and Connection
+            if (rs != null) rs.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching sessao by ID: " + e.getMessage(), e);
         }
@@ -117,33 +119,30 @@ public class SessaoDAO extends GenericDAO {
 
     public List<Sessao> getAllByProjetoId(int projetoId, String sortBy, String sortOrder) {
         List<Sessao> listaSessoes = new ArrayList<>();
-        String orderByClause = " ORDER BY s.criadoEm DESC"; 
-        if (sortBy != null && !sortBy.isEmpty()) {
-            String column = "s.criadoEm"; 
-            if ("titulo".equalsIgnoreCase(sortBy)) {
-                column = "s.titulo";
-            } else if ("status".equalsIgnoreCase(sortBy)) {
-                column = "s.status";
-            } else if ("testador".equalsIgnoreCase(sortBy)) { 
-                column = "u.nome";
-            }
-           
-            String order = "ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder) ? sortOrder.toUpperCase() : "DESC";
 
-            if ("u.nome".equals(column)) { 
-                orderByClause = " ORDER BY " + column + " " + order;
-            } else {
-                orderByClause = " ORDER BY s." + column.substring(2) + " " + order; 
+        String sqlSortByColumn = "s.criadoEm"; // Default sort column with alias
+        boolean needsUserJoin = false;
+
+        if (sortBy != null && !sortBy.isEmpty()) {
+            if ("titulo".equalsIgnoreCase(sortBy)) {
+                sqlSortByColumn = "s.titulo";
+            } else if ("status".equalsIgnoreCase(sortBy)) {
+                sqlSortByColumn = "s.status";
+            } else if ("testador".equalsIgnoreCase(sortBy)) {
+                sqlSortByColumn = "u.nome"; // User table alias 'u', column 'nome'
+                needsUserJoin = true;
             }
+            // Add other valid columns from Sessao table if needed, e.g., s.inicioEm
         }
 
-        
+        String sqlSortOrder = ("ASC".equalsIgnoreCase(sortOrder)) ? "ASC" : "DESC"; // Default to DESC if not ASC
+        String orderByClause = " ORDER BY " + sqlSortByColumn + " " + sqlSortOrder;
+
         String sql = "SELECT s.* FROM Sessao s ";
-        if ("u.nome".equals(orderByClause.split(" ")[2])) { 
+        if (needsUserJoin) { // Join Usuario table if sorting by tester's name
             sql += "JOIN Usuario u ON s.testador_id = u.id ";
         }
         sql += "WHERE s.projeto_id = ?" + orderByClause;
-
 
         try (Connection conn = this.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -153,19 +152,33 @@ public class SessaoDAO extends GenericDAO {
             while (rs.next()) {
                 listaSessoes.add(mapResultSetToSessao(rs));
             }
-            rs.close();
+            if (rs != null) rs.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching sessoes by projetoId: " + e.getMessage(), e);
         }
         return listaSessoes;
     }
 
-
     public List<Sessao> getAllByTestadorId(long testadorId, String sortBy, String sortOrder) {
         List<Sessao> listaSessoes = new ArrayList<>();
-        String orderByClause = " ORDER BY criadoEm DESC"; // Default
+
+        // Corrected: Implement dynamic sorting if intended, or remove parameters
+        String sqlSortByColumn = "criadoEm"; // Default sort column (no alias needed if only Sessao in FROM)
+        // Assuming sortBy here refers to columns directly on the Sessao table for simplicity
+        // If joining is needed for sorting (e.g. by project name), add join logic similar to getAllByProjetoId
+        if (sortBy != null && !sortBy.isEmpty()) {
+            if ("titulo".equalsIgnoreCase(sortBy)) {
+                sqlSortByColumn = "titulo";
+            } else if ("status".equalsIgnoreCase(sortBy)) {
+                sqlSortByColumn = "status";
+            }
+            // Add other valid columns from Sessao table
+        }
+        String sqlSortOrder = ("ASC".equalsIgnoreCase(sortOrder)) ? "ASC" : "DESC";
+        String orderByClause = " ORDER BY " + sqlSortByColumn + " " + sqlSortOrder;
 
         String sql = "SELECT * FROM Sessao WHERE testador_id = ?" + orderByClause;
+
         try (Connection conn = this.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, testadorId);
@@ -173,7 +186,7 @@ public class SessaoDAO extends GenericDAO {
             while (rs.next()) {
                 listaSessoes.add(mapResultSetToSessao(rs));
             }
-            rs.close();
+            if (rs != null) rs.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching sessoes by testadorId: " + e.getMessage(), e);
         }
@@ -191,24 +204,57 @@ public class SessaoDAO extends GenericDAO {
         }
     }
 
-    
     private Sessao mapResultSetToSessao(ResultSet rs) throws SQLException {
+        System.out.println("[SessaoDAO.mapResultSetToSessao] Mapping new session..."); // DEBUG
         Integer id = rs.getInt("id");
+        System.out.println("  Raw id from DB: " + id); // DEBUG
+
         String titulo = rs.getString("titulo");
+        System.out.println("  Raw titulo from DB: " + titulo); // DEBUG
+
         String descricaoSessao = rs.getString("descricao");
-         // Carregamento de relacionamentos
+        // System.out.println("  Raw descricao from DB: " + descricaoSessao); // DEBUG (optional)
+
         long testadorId = rs.getLong("testador_id");
-        Usuario testador = usuarioDAO.get(testadorId); 
+        System.out.println("  Raw testador_id from DB: " + testadorId); // DEBUG
+        Usuario testador = usuarioDAO.get(testadorId);
+        if (testador == null) {
+            System.out.println("  !! usuarioDAO.get(" + testadorId + ") returned NULL"); // DEBUG
+        } else {
+            System.out.println("  ++ usuarioDAO.get(" + testadorId + ") returned User: " + testador.getNome()); // DEBUG
+        }
 
         int estrategiaId = rs.getInt("estrategia_id");
-        Estrategia estrategia = estrategiaDAO.get(estrategiaId); 
+        System.out.println("  Raw estrategia_id from DB: " + estrategiaId); // DEBUG
+        Estrategia estrategia = estrategiaDAO.get(estrategiaId);
+        if (estrategia == null) {
+            System.out.println("  !! estrategiaDAO.get(" + estrategiaId + ") returned NULL"); // DEBUG
+        } else {
+            System.out.println("  ++ estrategiaDAO.get(" + estrategiaId + ") returned Estrategia: " + estrategia.getNome()); // DEBUG
+        }
 
         int projetoId = rs.getInt("projeto_id");
-        Projeto projeto = projetoDAO.get(projetoId); 
+        // System.out.println("  Raw projeto_id from DB: " + projetoId); // DEBUG (optional, seems less likely to be the issue for blank fields)
+        Projeto projeto = projetoDAO.get(projetoId);
+        // if (projeto == null) System.out.println("  !! projetoDAO.get(" + projetoId + ") returned NULL"); // DEBUG
 
-          // Controle do ciclo de vida
-        SessionStatus status = SessionStatus.valueOf(rs.getString("status"));
+        String statusString = rs.getString("status");
+        System.out.println("  Raw status string from DB: '" + statusString + "'"); // DEBUG
+        SessionStatus status = null; // Initialize to null
+        try {
+            if (statusString != null) { // Check if string itself is null
+                status = SessionStatus.valueOf(statusString.trim().toUpperCase()); // Trim and convert to uppercase for safety
+            } else {
+                System.out.println("  !! Status string from DB is NULL, though schema says NOT NULL. Check DB data for session ID " + id); // DEBUG
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("  !! FAILED to convert status string '" + statusString + "' to SessionStatus enum for session ID " + id + ". Error: " + e.getMessage()); // DEBUG
+            // Decide how to handle this - throw error, use default, or leave status as null (current behavior)
+        }
+        System.out.println("  Final SessionStatus object: " + status); // DEBUG
+
         LocalDateTime criadoEm = rs.getTimestamp("criadoEm").toLocalDateTime();
+        // System.out.println("  Raw criadoEm from DB: " + criadoEm); // DEBUG
 
         Timestamp inicioEmTs = rs.getTimestamp("inicioEm");
         LocalDateTime inicioEm = (inicioEmTs != null) ? inicioEmTs.toLocalDateTime() : null;
@@ -216,6 +262,7 @@ public class SessaoDAO extends GenericDAO {
         Timestamp finalizadoEmTs = rs.getTimestamp("finalizadoEm");
         LocalDateTime finalizadoEm = (finalizadoEmTs != null) ? finalizadoEmTs.toLocalDateTime() : null;
 
+        System.out.println("[SessaoDAO.mapResultSetToSessao] Finished mapping session ID: " + id + ". Title: " + titulo + ", Status: " + status); // DEBUG
         return new Sessao(id, titulo, testador, estrategia, projeto, descricaoSessao,
                 status, criadoEm, inicioEm, finalizadoEm);
     }

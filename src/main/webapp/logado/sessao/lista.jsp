@@ -12,7 +12,8 @@
     <link href="${pageContext.request.contextPath}/layout.css" rel="stylesheet" type="text/css"/>
     <script>
       function confirmAction(formId) {
-        if (confirm("<fmt:message key='confirm.link' />")) { // Make sure 'confirm.link' key exists in your properties
+        // Ensure 'confirm.link' key exists in your properties
+        if (confirm("<fmt:message key='confirm.link' />")) {
           document.getElementById(formId).submit();
         }
       }
@@ -27,18 +28,12 @@
         </div>
         <div class="login-logout-nav">
           <span><fmt:message key="welcome.message" /> ${sessionScope.usuarioLogado.nome}!</span>
-
-            <%-- Link back to the overall projects list --%>
           <a href="${pageContext.request.contextPath}/projetos/lista" class="button"><fmt:message key="projects.list" /></a>
-
-            <%-- R7: "Create New Session" button for TESTERs --%>
           <c:if test="${sessionScope.usuarioLogado.tipo == 'TESTER'}">
             <a href="${pageContext.request.contextPath}/sessoes/cadastro?projetoId=${projeto.id}" class="button button-add">
               <fmt:message key="sessions.create" />
             </a>
           </c:if>
-            <%-- End R7 Button --%>
-
           <a href="${pageContext.request.contextPath}/logout.jsp" class="button button-logout"><fmt:message key="exit.link" /></a>
         </div>
       </div>
@@ -47,9 +42,7 @@
 
   <main class="page-content">
     <div class="container">
-        <%-- The h1 was "Session List", changed to reflect it's for a specific project --%>
       <h1><fmt:message key="sessions.list.for.project.title" /> <c:out value="${projeto.nome}" /></h1>
-        <%-- Removed the <p> with project name as it's now in the h1 and header --%>
 
       <c:if test="${not empty requestScope.mensagens and requestScope.mensagens.existeErros}">
         <div id="erro">
@@ -69,7 +62,7 @@
             <th>
               <a href="${pageContext.request.contextPath}/sessoes/listaPorProjeto?projetoId=${projeto.id}&sortBy=titulo&sortOrder=<c:out value='${currentSortBy == "titulo" && currentSortOrder == "asc" ? "desc" : "asc"}' />">
                 <fmt:message key="session.title" />
-                <c:if test="${currentSortBy == 'titulo'}"> <c:out value="${currentSortOrder == 'asc' ? '&#9650;' : '&#9660;'}" /> </c:if>
+                <c:if test="${currentSortBy == 'titulo'}"> <c:out value="${currentSortOrder == 'asc' ? '&#9650;' : '&#9660;'}" escapeXml="false"/> </c:if>
               </a>
             </th>
             <th><fmt:message key="session.tester" /></th>
@@ -77,7 +70,7 @@
             <th>
               <a href="${pageContext.request.contextPath}/sessoes/listaPorProjeto?projetoId=${projeto.id}&sortBy=status&sortOrder=<c:out value='${currentSortBy == "status" && currentSortOrder == "asc" ? "desc" : "asc"}' />">
                 <fmt:message key="session.status" />
-                <c:if test="${currentSortBy == 'status'}"> <c:out value="${currentSortOrder == 'asc' ? '&#9650;' : '&#9660;'}" /> </c:if>
+                <c:if test="${currentSortBy == 'status'}"> <c:out value="${currentSortOrder == 'asc' ? '&#9650;' : '&#9660;'}" escapeXml="false"/> </c:if>
               </a>
             </th>
             <th><fmt:message key="session.created.at" /></th>
@@ -93,13 +86,15 @@
               <td><a href="${pageContext.request.contextPath}/sessoes/detalhes?id=${sessaoView.id}"><c:out value="${sessaoView.titulo}" /></a></td>
               <td><c:out value="${sessaoView.testador.nome}" /></td>
               <td><c:out value="${sessaoView.estrategia.nome}" /></td>
-              <td><fmt:message key="session.status.${sessaoView.status}" /></td>
+                <%-- MODIFIED for robustness --%>
+              <td><fmt:message key="session.status.${sessaoView.status.name()}"/></td>
               <td><c:out value="${sessaoView.criadoEmFormatado}" /></td>
               <td><c:out value="${sessaoView.inicioEmFormatado}" /></td>
               <td><c:out value="${sessaoView.finalizadoEmFormatado}" /></td>
               <td>
-                <c:if test="${(sessionScope.usuarioLogado.tipo == 'ADMIN' || sessionScope.usuarioLogado.id == sessaoView.testador.id)}">
-                  <c:if test="${sessaoView.status == 'CRIADA'}">
+                <c:if test="${(sessionScope.usuarioLogado.tipo.name() == 'ADMIN' || sessionScope.usuarioLogado.id == sessaoView.testador.id)}">
+                  <%-- MODIFIED for robustness (compare enum names) --%>
+                  <c:if test="${sessaoView.status.name() == 'CRIADA'}">
                     <form id="startForm${sessaoView.id}" action="${pageContext.request.contextPath}/sessoes/atualizarStatus" method="post" style="display:inline;">
                       <input type="hidden" name="sessaoId" value="${sessaoView.id}" />
                       <input type="hidden" name="novoStatus" value="EM_ANDAMENTO" />
@@ -117,7 +112,8 @@
                       </button>
                     </form>
                   </c:if>
-                  <c:if test="${sessaoView.status == 'EM_ANDAMENTO'}">
+                  <%-- MODIFIED for robustness (compare enum names) --%>
+                  <c:if test="${sessaoView.status.name() == 'EM_ANDAMENTO'}">
                     <form id="finishForm${sessaoView.id}" action="${pageContext.request.contextPath}/sessoes/atualizarStatus" method="post" style="display:inline;">
                       <input type="hidden" name="sessaoId" value="${sessaoView.id}" />
                       <input type="hidden" name="novoStatus" value="FINALIZADA" />

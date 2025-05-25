@@ -208,14 +208,15 @@ public class SessaoController extends HttpServlet {
 
     private void listaPorProjeto(HttpServletRequest request, HttpServletResponse response, Usuario usuarioLogado)
             throws ServletException, IOException {
+        System.out.println("[SessaoController] Entering listaPorProjeto method..."); // DEBUG
         Erro erros = new Erro();
         String projetoIdParam = request.getParameter("projetoId");
         int projetoId = -1;
 
-        // ... (parameter validation for projetoId as before) ...
         if (projetoIdParam != null && !projetoIdParam.isEmpty()) {
             try {
                 projetoId = Integer.parseInt(projetoIdParam);
+                System.out.println("[SessaoController] projetoId: " + projetoId); // DEBUG
             } catch (NumberFormatException e) {
                 erros.add("ID do projeto inválido.");
             }
@@ -225,8 +226,7 @@ public class SessaoController extends HttpServlet {
 
         if (erros.isExisteErros()) {
             request.setAttribute("mensagens", erros);
-            // Forward to an appropriate error view or project list
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/projetos/lista"); // Or your error page
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/projetos/lista");
             dispatcher.forward(request, response);
             return;
         }
@@ -234,33 +234,55 @@ public class SessaoController extends HttpServlet {
         Projeto projeto = projetoDAO.get(projetoId);
         if (projeto == null) {
             erros.add("Projeto não encontrado.");
+            System.out.println("[SessaoController] Projeto with ID " + projetoId + " not found."); // DEBUG
             request.setAttribute("mensagens", erros);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/projetos/lista");
             dispatcher.forward(request, response);
             return;
         }
-
-        // Permission Check (as before, ensure this logic is robust for your needs)
-        // ...
+        System.out.println("[SessaoController] Fetched Projeto: " + projeto.getNome()); // DEBUG
 
         String sortBy = request.getParameter("sortBy");
         String sortOrder = request.getParameter("sortOrder");
         if (sortBy == null || sortBy.trim().isEmpty()) sortBy = "criadoEm";
         if (sortOrder == null || sortOrder.trim().isEmpty()) sortOrder = "desc";
+        System.out.println("[SessaoController] Sorting by: " + sortBy + ", Order: " + sortOrder); // DEBUG
 
         List<Sessao> listaSessoesOriginal = sessaoDAO.getAllByProjetoId(projetoId, sortBy, sortOrder);
+        System.out.println("[SessaoController] Number of sessions found: " + listaSessoesOriginal.size()); // DEBUG
 
-        // Create a new list for view, with formatted dates
         List<Map<String, Object>> listaSessoesView = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         for (Sessao sessao : listaSessoesOriginal) {
+            System.out.println("  [SessaoController] Processing session ID: " + sessao.getId()); // DEBUG
             Map<String, Object> sessaoViewMap = new HashMap<>();
             sessaoViewMap.put("id", sessao.getId());
-            sessaoViewMap.put("titulo", sessao.getTitulo());
-            sessaoViewMap.put("testador", sessao.getTestador()); // Assuming Testador object has a .nome for display
-            sessaoViewMap.put("estrategia", sessao.getEstrategia()); // Assuming Estrategia object has a .nome
-            sessaoViewMap.put("status", sessao.getStatus()); // Will use <fmt:message> for status localization in JSP
+
+            String titulo = sessao.getTitulo();
+            sessaoViewMap.put("titulo", titulo);
+            System.out.println("    > Titulo: " + titulo); // DEBUG
+
+            Usuario testador = sessao.getTestador();
+            sessaoViewMap.put("testador", testador);
+            if (testador != null) {
+                System.out.println("    > Testador ID: " + testador.getId() + ", Nome: " + testador.getNome()); // DEBUG
+            } else {
+                System.out.println("    > Testador: NULL"); // DEBUG
+            }
+
+            Estrategia estrategia = sessao.getEstrategia();
+            sessaoViewMap.put("estrategia", estrategia);
+            if (estrategia != null) {
+                System.out.println("    > Estrategia ID: " + estrategia.getId() + ", Nome: " + estrategia.getNome()); // DEBUG
+            } else {
+                System.out.println("    > Estrategia: NULL"); // DEBUG
+            }
+
+            SessionStatus status = sessao.getStatus();
+            sessaoViewMap.put("status", status);
+            System.out.println("    > Status: " + (status != null ? status.name() : "NULL")); // DEBUG
+
 
             if (sessao.getCriadoEm() != null) {
                 sessaoViewMap.put("criadoEmFormatado", sessao.getCriadoEm().format(formatter));
@@ -277,16 +299,17 @@ public class SessaoController extends HttpServlet {
             } else {
                 sessaoViewMap.put("finalizadoEmFormatado", "");
             }
-            // Add the original sessao object if needed for actions or complex data not directly displayed
-            // sessaoViewMap.put("originalSessao", sessao);
             listaSessoesView.add(sessaoViewMap);
         }
 
+        System.out.println("[SessaoController] listaSessoesView prepared with " + listaSessoesView.size() + " items."); // DEBUG
         request.setAttribute("projeto", projeto);
-        request.setAttribute("listaSessoesView", listaSessoesView); // Pass the new list
+        request.setAttribute("listaSessoesView", listaSessoesView);
         request.setAttribute("usuarioLogado", usuarioLogado);
         request.setAttribute("currentSortBy", sortBy);
         request.setAttribute("currentSortOrder", sortOrder);
+
+        System.out.println("[SessaoController] Forwarding to /logado/sessao/lista.jsp"); // DEBUG
         RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/sessao/lista.jsp");
         dispatcher.forward(request, response);
     }
