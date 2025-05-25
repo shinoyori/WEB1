@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException; // Ensure this import is present
+import jakarta.servlet.ServletException; //sempre verificar que isso aqui foi importado corretamente!!!
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ public class AdminController extends HttpServlet {
     private EstrategiaDAO estrategiaDAO;
 
     @Override
-    public void init() throws ServletException { // <<<CORRECTED HERE: Added "throws ServletException"
+    public void init() throws ServletException { //CORRIGIDO AQUI: foi adicionado "throws ServletException"
         super.init();
         estrategiaDAO = new EstrategiaDAO();
     }
@@ -97,7 +97,7 @@ public class AdminController extends HttpServlet {
         }
     }
 
-    // --- Métodos para Estratégias ---
+    //métodos para estratégias
 
     private void apresentaFormCadastroEstrategia(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -190,7 +190,7 @@ public class AdminController extends HttpServlet {
     }
 
     private void removeEstrategia(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException { // Added ServletException here as forward is used
+            throws IOException, ServletException { //foi adicionado ServletException aqui pq o metodo forward já está sendo usado!!!
         Erro erros = new Erro();
         String idParam = request.getParameter("id");
         int id = -1;
