@@ -40,7 +40,7 @@
             <p><fmt:message key="home.page.content" /></p>
 
             <nav class="public-info-nav">
-                <h2><fmt:message key="public.info.link1"/></h2>
+                <h3><fmt:message key="public.info.link1"/></h3>
                 <ul>
                     <li><a href="${pageContext.request.contextPath}/estrategias/lista"><fmt:message key="strategies.list" /></a></li>
                 </ul>
