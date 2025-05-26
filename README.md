@@ -2,7 +2,7 @@
 
 ## Decrição
 
-O projeto foi desenvolvido para a atividade AA-1 da disciplina Desenvolvimento de Software para a Web 1 (UFSCar) e tem o objetivo de auxilia testadores de jogos digitais (game testers) na aplicação de Testes Exploratórios (TE), permitindo a criação de projetos, cadastro de estratégias de teste, e gerenciamento de sessões de teste exploratório
+O projeto foi desenvolvido para a atividade AA-1 da disciplina Desenvolvimento de Software para a Web 1 (UFSCar) e tem o objetivo de auxilia5 testadores de jogos digitais (game testers) na aplicação de Testes Exploratórios (TE), permitindo a criação de projetos, cadastro de estratégias de teste, e gerenciamento de sessões de teste exploratório
 
 ## Funcionalidades
 
