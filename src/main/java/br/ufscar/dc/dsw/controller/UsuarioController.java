@@ -43,7 +43,7 @@ public class UsuarioController extends HttpServlet {
         Erro erros = new Erro();
 
         if (usuario == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
 
