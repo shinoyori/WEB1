@@ -10,7 +10,7 @@
   <packaging>war</packaging>
 
   <name>AA1 Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
+  
   <url>http://www.example.com</url>
 
   <properties>
@@ -61,7 +61,7 @@
 
   <build>
     <finalName>AA1</finalName>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.apache.tomcat.maven</groupId>
@@ -78,7 +78,7 @@
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
         </plugin>
-        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
+        
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.0.2</version>
