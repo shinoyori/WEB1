@@ -1,4 +1,4 @@
-/* Basic Reset/Normalize (Consider using a more comprehensive one like Normalize.css) */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,15 +6,15 @@
 }
 
 html {
-    font-size: 16px; /* Base font size */
+    font-size: 16px;
     line-height: 1.6;
     font-family: "Roboto Light", sans-serif;
 }
 
 body {
-    /* background-color: lightblue !important; */ /* We'll refine this */
-    background-color: #f4f7f6; /* A softer, more neutral background */
-    color: #333; /* Default text color */
+
+    background-color: #f4f7f6;
+    color: #333;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -22,14 +22,14 @@ body {
 
 .container {
     width: 90%;
-    max-width: 1100px; /* Max width for content */
-    margin: 0 auto; /* Center the container */
+    max-width: 1100px;
+    margin: 0 auto;
     padding: 20px 0;
 }
 
-/* Header & Login/Logout Navigation */
+
 .page-header {
-    background-color: #3498db; /* A pleasant blue */
+    background-color: #052258;
     color: #ffffff;
     padding: 10px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -37,7 +37,7 @@ body {
 
 .page-header .container {
     display: flex;
-    justify-content: flex-end; /* Aligns login/logout to the right */
+    justify-content: flex-end;
     align-items: center;
 }
 
@@ -55,29 +55,29 @@ body {
 }
 
 .login-logout-nav a:hover {
-    background-color: #2980b9; /* Darker blue on hover */
+    background-color: #2980b9;
 }
 
 .login-logout-nav .button-login,
 .login-logout-nav .button-logout {
-    background-color: #2ecc71; /* Green for login/logout */
+    background-color: #057f39;
 }
 .login-logout-nav .button-login:hover,
 .login-logout-nav .button-logout:hover {
-    background-color: #27ae60; /* Darker green */
+    background-color: #0a5f2e;
 }
 
 
 /* Main Content Area */
 .page-content {
-    flex-grow: 1; /* Ensures footer stays at the bottom */
-    text-align: center; /* Replaces div align="center" */
+    flex-grow: 1;
+    text-align: center;
     padding: 30px 0;
 }
 
 .page-content h1 {
     font-size: 2.5rem;
-    color: #2c3e50; /* Darker heading color */
+    color: #2c3e50;
     margin-bottom: 20px;
 }
 
@@ -85,7 +85,7 @@ body {
     font-size: 1.1rem;
     margin-bottom: 30px;
     color: #555;
-    max-width: 700px; /* Constrain paragraph width for readability */
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -99,7 +99,7 @@ body {
 
 .public-info-nav h2 {
     font-size: 1.5rem;
-    color: #34495e; /* Another shade for section titles */
+    color: #34495e;
     margin-bottom: 15px;
 }
 
@@ -113,7 +113,7 @@ body {
 }
 
 .public-info-nav ul li a {
-    color: #3498db; /* Link color consistent with header */
+    color: #3498db;
     text-decoration: none;
     font-size: 1.1rem;
 }
@@ -125,8 +125,8 @@ body {
 
 /* Footer */
 .page-footer {
-    background-color: #2c3e50; /* Dark footer */
-    color: #ecf0f1; /* Light text on dark background */
+    background-color: #2c3e50;
+    color: #ecf0f1;
     padding: 20px 0;
     text-align: center;
     font-size: 0.9rem;
@@ -140,12 +140,12 @@ body {
 /* Error message styling */
 #erro {
     width: 80%;
-    max-width: 600px; /* Max width for error box */
-    margin: 20px auto; /* Centering */
+    max-width: 600px;
+    margin: 20px auto;
     padding: 15px;
-    border: 1px solid #e74c3c; /* Red border */
-    background-color: #fbeae5; /* Light reddish background */
-    color: #c0392b; /* Dark red text */
+    border: 1px solid #e74c3c;
+    background-color: #fbeae5;
+    color: #c0392b;
     border-radius: 4px;
 }
 
@@ -154,31 +154,29 @@ body {
     padding-left: 0;
 }
 
-/* Ensure your basic html, body styles from the home.jsp improvements are also present */
-/* e.g., html { font-size: 16px; ... } body { background-color: #f4f7f6; ... } */
 
 /* Login Page Specific Styles */
 .login-form-container {
-    width: 90%; /* Responsive width */
-    max-width: 450px; /* Maximum width of the login box, adjust as needed */
-    margin: 60px auto; /* Adds space from top/bottom and centers horizontally */
-    padding: 30px 35px; /* Added a bit more horizontal padding */
-    background-color: #ffffff; /* White background for the form card */
+    width: 90%;
+    max-width: 450px;
+    margin: 60px auto;
+    padding: 30px 35px;
+    background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* A slightly more pronounced shadow */
-    text-align: left; /* Reset text-align if a parent has it centered */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    text-align: left;
 }
 
 .login-form-container h1 {
     text-align: center;
-    font-size: 1.8rem; /* Adjusted size */
-    color: #2c3e50; /* Consistent heading color */
+    font-size: 1.8rem;
+    color: #2c3e50;
     margin-bottom: 25px;
 }
 
 /* Style for form elements within the login container */
 .login-form-container form div {
-    margin-bottom: 18px; /* Space between form rows */
+    margin-bottom: 18px;
 }
 
 .login-form-container label {
@@ -191,19 +189,19 @@ body {
 
 .login-form-container input[type="text"],
 .login-form-container input[type="email"],
-.login-form-container input[type="password"] { /* Added password type just in case you switch */
+.login-form-container input[type="password"] {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Ensures padding doesn't expand width */
+    box-sizing: border-box;
     font-size: 1rem;
 }
 
 .login-form-container input[type="submit"] {
     width: 100%;
     padding: 12px;
-    background-color: #3498db; /* Main theme color */
+    background-color: #052258;
     color: white;
     border: none;
     border-radius: 4px;
@@ -214,23 +212,22 @@ body {
 }
 
 .login-form-container input[type="submit"]:hover {
-    background-color: #2980b9; /* Darker shade on hover */
+    background-color: #2980b9;
 }
 
-/* Styling for the error message section (id="erro") */
-.login-form-container #erro { /* Assuming #erro is inside .login-form-container */
+.login-form-container #erro {
     width: 100%;
-    margin: 0 auto 20px auto; /* Center if narrower, add bottom margin */
+    margin: 0 auto 20px auto;
     padding: 10px 15px;
-    border: 1px solid #e74c3c; /* Red border from previous theme */
-    background-color: #fbeae5; /* Light reddish background */
-    color: #c0392b; /* Dark red text */
+    border: 1px solid #e74c3c;
+    background-color: #fbeae5;
+    color: #c0392b;
     border-radius: 4px;
 }
 
 .login-form-container #erro ul {
     list-style-position: inside;
-    padding-left: 0; /* Remove default ul padding */
+    padding-left: 0;
     margin:0;
 }
 
@@ -238,12 +235,6 @@ body {
     font-size: 0.9rem;
 }
 
-
-
-/* General page structure (ensure these are defined from previous steps) */
-/* html, body, .container, .page-header, .login-logout-nav, .button, .page-footer */
-
-/* Styles for .card look (can be reused) */
 .card {
     background-color: #ffffff;
     padding: 25px 30px;
@@ -262,10 +253,9 @@ body {
 .page-header .site-title {
     font-size: 1.6em;
     font-weight: bold;
-    color: #ffffff; /* Assuming header has dark background from previous styles */
+    color: #ffffff;
 }
 
-/* Admin Dashboard Specific Styles */
 .admin-dashboard h1 {
     text-align: center;
     margin-bottom: 30px;
@@ -273,7 +263,7 @@ body {
     font-size: 2.2rem;
 }
 
-.admin-menu { /* .card class is already applied for background/shadow */
+.admin-menu {
     margin-top: 20px;
 }
 
@@ -292,15 +282,15 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center; /* Center buttons if they don't fill the row */
+    justify-content: center;
 }
 
 .admin-menu ul li {
-    /* No specific flex styles needed if just centering a few items */
+
 }
 
 .admin-menu-button {
-    display: inline-block; /* Changed to inline-block for better flow with gap */
+    display: inline-block;
     padding: 12px 25px;
     background-color: #3498db;
     color: white;
@@ -310,7 +300,7 @@ body {
     font-weight: 500;
     text-align: center;
     transition: background-color 0.2s ease, transform 0.2s ease;
-    min-width: 180px; /* Minimum width for buttons */
+    min-width: 180px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
@@ -322,10 +312,10 @@ body {
 }
 
 /* Form Container (can be similar to .login-form-container or a new style) */
-.form-container { /* .card class already applied for background/shadow */
-    max-width: 650px; /* Adjust as needed */
+.form-container {
+    max-width: 650px;
     margin: 30px auto;
-    padding: 30px 35px; /* Inherits from .card, can override */
+    padding: 30px 35px;
 }
 
 .form-container h2 {
@@ -337,7 +327,7 @@ body {
     padding-bottom: 15px;
 }
 
-/* Form Groups and Elements */
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -351,9 +341,9 @@ body {
 }
 
 .form-group input[type="text"],
-.form-group input[type="password"], /* if you change password field type */
+.form-group input[type="password"],
 .form-group input[type="email"],
-.form-group select.form-control { /* Add .form-control to select for styling */
+.form-group select.form-control {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -372,28 +362,28 @@ body {
     outline: none;
 }
 
-.form-group .form-text.text-muted { /* For helper text like password hint */
+.form-group .form-text.text-muted {
     font-size: 0.85rem;
-    color: #6c757d; /* Bootstrap muted color */
+    color: #6c757d;
     display: block;
     margin-top: 5px;
 }
 
 .form-actions {
     margin-top: 30px;
-    text-align: center; /* Center the button(s) */
+    text-align: center;
 }
 
-.form-actions .button, /* General button styling from before */
-.form-actions input[type="submit"].button-primary { /* More specific styling for primary form button */
+.form-actions .button,
+.form-actions input[type="submit"].button-primary {
     /* padding: 12px 30px; */ /* from .button */
     /* font-size: 1.1rem; */   /* from .button */
-    /* width: auto; */ /* Allow button to size to content or set a min-width */
+    /* width: auto; */
     min-width: 150px;
 }
 
-.button.button-primary { /* If you want a distinct primary button color */
-    background-color: #28a745; /* Example: Green */
+.button.button-primary {
+    background-color: #28a745;
     border-color: #28a745;
 }
 .button.button-primary:hover {
@@ -402,11 +392,9 @@ body {
 }
 
 
-/* Error message styling (ensure #erro styles are sufficient from login page) */
-.form-container #erro { /* If #erro is inside .form-container */
+.form-container #erro {
     width: 100%;
     margin-bottom: 20px;
-    /* Inherits existing #erro styles for border, background, color */
 }
 .form-container #erro ul {
     list-style-position: inside;
@@ -417,36 +405,33 @@ body {
     font-size: 0.9rem;
 }
 
-/* General form styling (already covered by previous suggestions, but ensuring consistency) */
 .form-container {
-    max-width: 700px; /* Adjusted max-width for project form */
+    max-width: 700px;
     margin: 30px auto;
     padding: 30px 40px;
 }
 
 .form-group textarea {
-    resize: vertical; /* Allow vertical resizing for textareas */
+    resize: vertical;
 }
 
-/* Multi-select specific styling */
 .form-group select[multiple] {
-    height: auto; /* Allow height to adjust based on content */
-    min-height: 120px; /* Minimum height for multi-select */
+    height: auto;
+    min-height: 120px;
 }
 
 .form-group select[multiple] option {
     padding: 8px 10px;
 }
 
-/* Table Styling for Project List */
 .table-responsive {
-    overflow-x: auto; /* Enables horizontal scrolling on small screens */
+    overflow-x: auto;
     margin-top: 20px;
 }
 
 .data-table {
     width: 100%;
-    border-collapse: collapse; /* Removes double borders */
+    border-collapse: collapse;
     margin-top: 20px;
     font-size: 0.95rem;
     color: #333;
@@ -456,20 +441,20 @@ body {
 .data-table td {
     padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid #ddd; /* Light border for rows */
+    border-bottom: 1px solid #ddd;
 }
 
 .data-table th {
-    background-color: #f2f2f2; /* Light background for headers */
+    background-color: #f2f2f2;
     font-weight: bold;
     color: #555;
-    white-space: nowrap; /* Prevent wrapping for headers with sort icons */
+    white-space: nowrap;
 }
 
-.data-table th a { /* For sortable column headers */
+.data-table th a {
     text-decoration: none;
     color: #555;
-    display: inline-flex; /* Align text and arrow */
+    display: inline-flex;
     align-items: center;
     gap: 5px;
 }
@@ -479,12 +464,12 @@ body {
 }
 
 .data-table tbody tr:hover {
-    background-color: #f9f9f9; /* Subtle hover effect on rows */
+    background-color: #f9f9f9;
 }
 
 /* Button styles for actions in tables */
 .button-edit {
-    background-color: #007bff; /* Blue for edit */
+    background-color: #007bff;
     color: white;
     padding: 6px 12px;
     border-radius: 4px;
@@ -498,7 +483,7 @@ body {
 }
 
 .button-delete {
-    background-color: #dc3545; /* Red for delete */
+    background-color: #dc3545;
     color: white;
     padding: 6px 12px;
     border: none;
@@ -512,7 +497,7 @@ body {
 }
 
 .button-add {
-    background-color: #28a745; /* Green for add new */
+    background-color: #28a745;
     color: white;
     padding: 8px 15px;
     border-radius: 4px;
@@ -525,8 +510,6 @@ body {
     background-color: #218838;
 }
 
-/* General form styling for strategy form (reusing .form-container, .form-group) */
-/* Add specific styles for textareas if needed, e.g., rows attribute */
 
 /* Image fields in forms */
 .image-field-group {
@@ -547,7 +530,7 @@ body {
 }
 
 .button-secondary {
-    background-color: #6c757d; /* Grayish button */
+    background-color: #6c757d;
     color: white;
     padding: 8px 15px;
     border: none;
@@ -565,14 +548,12 @@ body {
     font-size: 0.85em;
 }
 
-/* Strategy List Table (reusing .data-table, .table-responsive) */
-/* No specific new styles needed if existing table styles are sufficient */
 
 /* Strategy Details Page */
 .details-container {
     padding: 30px;
     margin: 30px auto;
-    max-width: 800px; /* Adjust max width for details content */
+    max-width: 800px;
     text-align: left;
 }
 
@@ -623,8 +604,8 @@ body {
 
 .image-item img {
     width: 100%;
-    height: 200px; /* Fixed height for consistency, adjust as needed */
-    object-fit: cover; /* Ensures image covers the area without distortion */
+    height: 200px;
+    object-fit: cover;
     border-bottom: 1px solid #eee;
 }
 
@@ -635,7 +616,7 @@ body {
 }
 
 .button-details {
-    background-color: #17a2b8; /* Info blue */
+    background-color: #17a2b8;
     color: white;
     padding: 6px 12px;
     border-radius: 4px;
@@ -650,7 +631,7 @@ body {
 
 /* Buttons for session lifecycle */
 .button-start {
-    background-color: #28a745; /* Green */
+    background-color: #28a745;
     color: white;
 }
 .button-start:hover {
@@ -658,24 +639,23 @@ body {
 }
 
 .button-finish {
-    background-color: #007bff; /* Blue */
+    background-color: #007bff;
     color: white;
 }
 .button-finish:hover {
     background-color: #0056b3;
 }
 
-.button-cancel { /* General cancel button, can be red or gray */
-    background-color: #dc3545; /* Red */
-    /* or background-color: #6c757d; Grey */
+.button-cancel {
+    background-color: #dc3545;
+    /* background-color: #6c757d; */
     color: white;
 }
 .button-cancel:hover {
-    background-color: #c82333; /* Darker Red */
+    background-color: #c82333;
     /* or background-color: #5a6268; Darker Grey */
 }
 
-/* Ensure .button class styles (padding, border-radius, etc.) apply to these */
 /* For table action buttons, make them a bit smaller */
 .data-table .button {
     padding: 5px 10px;
@@ -746,4 +726,3 @@ body {
 }
 .item-list-entry .item-actions .button:first-child {
     margin-left: 0;
-}
