@@ -4,8 +4,8 @@
 ----------- **Como Rodar** -----------
 
 **Executar Script BD**
--Rode db/MySQL/create.sql (cria banco Sistema) - SGBD MYSQL
--user e senha podem ser trocado no arquivo (...\WEB1\src\main\java\br\ufscar\dc\dsw\dao\GenericDAO.java)
+- Rode db/MySQL/create.sql (cria banco Sistema) - SGBD MYSQL
+- user e senha podem ser trocado no arquivo (...\WEB1\src\main\java\br\ufscar\dc\dsw\dao\GenericDAO.java)
    
 **Build (Maven)**
  - Na raiz do projeto: mvn clean package
