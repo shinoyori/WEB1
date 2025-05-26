@@ -20,6 +20,7 @@
         </div>
         <div class="login-logout-nav">
           <span><fmt:message key="welcome.message" /> ${sessionScope.usuarioLogado.nome}!</span>
+          <a href="${pageContext.request.contextPath}/estrategias/lista"><fmt:message key="strategies.list" /></a>
           <a href="${pageContext.request.contextPath}/logout.jsp" class="button button-logout"><fmt:message key="exit.link" /></a>
         </div>
       </div>

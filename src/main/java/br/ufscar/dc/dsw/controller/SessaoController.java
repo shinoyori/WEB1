@@ -62,7 +62,7 @@ public class SessaoController extends HttpServlet {
 
         String action = request.getPathInfo();
         if (action == null) {
-            action = "/"; // Default action, perhaps redirect to a projects list or user dashboard
+            action = "/";
         }
 
         try {
@@ -82,8 +82,6 @@ public class SessaoController extends HttpServlet {
                     }
                     break;
                 case "/listaPorProjeto": // R9: Listagem de sessões de teste de um projeto
-                    // Permissions for listing are more nuanced (TESTER assigned to project, ADMIN)
-                    // This simple check allows any logged-in user, refine as per specific project assignment logic
                     listaPorProjeto(request, response, usuarioLogado);
                     break;
                 case "/atualizarStatus": // R8: Gerenciamento do ciclo de vida
@@ -124,7 +122,6 @@ public class SessaoController extends HttpServlet {
 
         if (erros.isExisteErros()) {
             request.setAttribute("mensagens", erros);
-            // Redirect or forward to an appropriate page, e.g., project list
             response.sendRedirect(request.getContextPath() + "/projetos/lista"); // Assuming you have a project list
             return;
         }
@@ -349,11 +346,10 @@ public class SessaoController extends HttpServlet {
         if (sessao == null) {
             erros.add("Sessão não encontrada.");
         } else {
-            // Permission Check for R8: Only assigned TESTER or ADMIN can change status
+            // R8: Apenas testador e admin conseguem alterar status
             if (!Role.ADMIN.equals(usuarioLogado.getTipo()) && sessao.getTestador().getId() != usuarioLogado.getId()) {
                 erros.add("Você não tem permissão para alterar o status desta sessão.");
             } else {
-                // Basic State Transition Logic (can be expanded)
                 boolean isValidTransition = false;
                 switch (sessao.getStatus()) {
                     case CRIADA:

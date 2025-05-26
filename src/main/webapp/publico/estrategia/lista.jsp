@@ -38,10 +38,8 @@
             <c:when test="${sessionScope.usuarioLogado != null}">
               <span><fmt:message key="welcome.message" /> ${sessionScope.usuarioLogado.nome}!</span>
               <%-- Exibe mensagem de boas-vindas com nome do usuário logado --%>
-              <a href="${pageContext.request.contextPath}/logout.jsp" class="button button-logout">
-                <fmt:message key="exit.link" />
-                <%-- Link para logout --%>
-              </a>
+
+
               <%-- Links específicos dependendo do tipo do usuário --%>
               <c:if test="${sessionScope.usuarioLogado.tipo == 'ADMIN'}">
                 <a href="${pageContext.request.contextPath}/admin/" class="button">
@@ -49,12 +47,19 @@
                   <%-- Link para dashboard do admin --%>
                 </a>
               </c:if>
+
               <c:if test="${sessionScope.usuarioLogado.tipo == 'TESTER'}">
-                <a href="${pageContext.request.contextPath}/usuarios/" class="button">
-                  <fmt:message key="users.list" />
-                  <%-- Link para lista de usuários para testers --%>
+                <a href="${pageContext.request.contextPath}/projetos/lista" class="button">
+                  <fmt:message key="projects.list" />
                 </a>
               </c:if>
+
+
+              <a href="${pageContext.request.contextPath}/logout.jsp" class="button button-logout">
+                <fmt:message key="exit.link" />
+                  <%-- Link para logout --%>
+              </a>
+              
             </c:when>
             <c:otherwise>
               <%-- Caso o usuário não esteja logado, mostra o link para login --%>
