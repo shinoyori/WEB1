@@ -1,5 +1,5 @@
 # Sistema de Apoio a Testes Exploratórios em Video Games
-###* Como Rodar *
+* Como Rodar *
 1. Rode db/MySQL/create.sql (cria banco Sistema) - SGBD MYSQL
     -> user e senha podem ser trocado no arquivo (...\WEB1\src\main\java\br\ufscar\dc\dsw\dao\GenericDAO.java)
    
