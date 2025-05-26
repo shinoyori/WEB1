@@ -1,18 +1,18 @@
 # Sistema de Apoio a Testes Exploratórios em Video Games
 ----------- **Como Rodar** -----------
 -  Rode db/MySQL/create.sql (cria banco Sistema) - SGBD MYSQL
-    -> user e senha podem ser trocado no arquivo (...\WEB1\src\main\java\br\ufscar\dc\dsw\dao\GenericDAO.java)
+    --user e senha podem ser trocado no arquivo (...\WEB1\src\main\java\br\ufscar\dc\dsw\dao\GenericDAO.java)
    
 -  Build (Maven)
-  -> Na raiz do projeto: mvn clean package
-  -> Gera: target/AA1.war
+  -- Na raiz do projeto: mvn clean package
+  -- Gera: target/AA1.war
    
 -  Deploy (Tomcat)
-  -> Copie target/AA1.war para TOMCAT_HOME/webapps/.
-  -> Inicie/Reinicie o Tomcat.
+  -- Copie target/AA1.war para TOMCAT_HOME/webapps/.
+  -- Inicie/Reinicie o Tomcat.
    
 -  Teste
-  -> http://localhost:8080/AA1/
+  -- http://localhost:8080/AA1/
 
 ## Decrição
 
