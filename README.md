@@ -12,7 +12,7 @@
  - Inicie/Reinicie o Tomcat.
    
 *  Teste
- - http://localhost:8080/AA1/
+ .- http://localhost:8080/AA1/
 
 ## Decrição
 
