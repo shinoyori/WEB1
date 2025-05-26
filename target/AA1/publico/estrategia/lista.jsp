@@ -59,7 +59,7 @@
                 <fmt:message key="exit.link" />
                   <%-- Link para logout --%>
               </a>
-              
+
             </c:when>
             <c:otherwise>
               <%-- Caso o usuário não esteja logado, mostra o link para login --%>

@@ -16,15 +16,12 @@ public class Sessao {
     private LocalDateTime inicioEm;
     private LocalDateTime finalizadoEm;
 
-    // Default constructor
+    // Default
     public Sessao() {
         this.criadoEm = LocalDateTime.now();
         this.status = SessionStatus.CRIADA; // Default status
     }
 
-    // This is the main constructor for setting all fields except ID.
-    // The DAO's 10-arg constructor will call this one.
-    // Ensure parameter name for 'descricao' matches what the 10-arg constructor passes.
     public Sessao(String titulo, Usuario testador, Estrategia estrategia, Projeto projeto, String descricao,
                   SessionStatus status, LocalDateTime criadoEm, LocalDateTime inicioEm, LocalDateTime finalizadoEm) {
         this.titulo = titulo;
@@ -41,22 +38,13 @@ public class Sessao {
         }
     }
 
-    // This is the constructor your DAO calls (10 arguments)
     public Sessao(Integer id, String titulo, Usuario testador, Estrategia estrategia, Projeto projeto, String descricaoSessao, // DAO uses 'descricaoSessao'
                   SessionStatus status, LocalDateTime criadoEm, LocalDateTime inicioEm, LocalDateTime finalizadoEm) {
-        // Call the 9-argument constructor above, passing 'descricaoSessao' for the 'descricao' parameter
+
         this(titulo, testador, estrategia, projeto, descricaoSessao, status, criadoEm, inicioEm, finalizadoEm);
         this.id = id;
     }
 
-    // Remove or fix any other constructors that cause duplication.
-    // For instance, the 8-argument constructor you had:
-    // public Sessao(String titulo, Usuario testador, Estrategia estrategia, String descricao,
-    //               SessionStatus status, LocalDateTime criadoEm, LocalDateTime inicioEm, LocalDateTime finalizadoEm) { ... }
-    // This one is different because it's missing 'Projeto projeto'. If you need it, ensure it's correct.
-    // If it was intended to be one of the conflicting ones, it needs to be addressed.
-
-    // Getters and Setters
     public Integer getId() {
         return id;
     }

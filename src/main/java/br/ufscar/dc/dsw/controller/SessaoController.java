@@ -91,8 +91,7 @@ public class SessaoController extends HttpServlet {
                     mostraDetalhesSessao(request, response, usuarioLogado);
                     break;
                 default:
-                    // Redirect to a relevant page, e.g., user dashboard or projects list
-                    response.sendRedirect(request.getContextPath() + "/"); // Or some other sensible default
+                    response.sendRedirect(request.getContextPath() + "/");
                     break;
             }
         } catch (RuntimeException | IOException | ServletException e) {
@@ -150,7 +149,7 @@ public class SessaoController extends HttpServlet {
         String titulo = request.getParameter("titulo");
         String descricao = request.getParameter("descricao");
         String estrategiaIdParam = request.getParameter("estrategiaId");
-        String projetoIdParam = request.getParameter("projetoId"); // Should be passed as hidden field or from context
+        String projetoIdParam = request.getParameter("projetoId");
 
         int estrategiaId = -1, projetoId = -1;
 
@@ -168,10 +167,9 @@ public class SessaoController extends HttpServlet {
 
         if (erros.isExisteErros()){
             request.setAttribute("mensagens", erros);
-            // Refetch data for form re-display
             if (projetoId > 0) request.setAttribute("projeto", projetoDAO.get(projetoId));
             request.setAttribute("listaEstrategias", estrategiaDAO.getAll());
-            request.setAttribute("sessaoFormData", request.getParameterMap()); // To repopulate form
+            request.setAttribute("sessaoFormData", request.getParameterMap());
             RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/sessao/formulario.jsp");
             dispatcher.forward(request, response);
             return;
@@ -328,7 +326,7 @@ public class SessaoController extends HttpServlet {
             erros.add("Novo status não fornecido.");
         }
 
-        String projetoIdRedirect = request.getParameter("projetoId"); // For redirecting back to the list
+        String projetoIdRedirect = request.getParameter("projetoId");
 
         if (erros.isExisteErros()) {
             request.setAttribute("mensagens", erros);
@@ -336,7 +334,7 @@ public class SessaoController extends HttpServlet {
             if (projetoIdRedirect != null && !projetoIdRedirect.isEmpty()) {
                 response.sendRedirect(request.getContextPath() + "/sessoes/listaPorProjeto?projetoId=" + projetoIdRedirect);
             } else {
-                response.sendRedirect(request.getContextPath() + "/"); // Or some other sensible default
+                response.sendRedirect(request.getContextPath() + "/");
             }
             return;
         }
@@ -358,14 +356,13 @@ public class SessaoController extends HttpServlet {
                     case EM_ANDAMENTO:
                         if (novoStatus == SessionStatus.FINALIZADA || novoStatus == SessionStatus.CANCELADA) isValidTransition = true;
                         break;
-                    // FINALIZADA and CANCELADA usually are terminal states
                     case FINALIZADA:
                     case CANCELADA:
                         erros.add("Sessão já está " + sessao.getStatus().name().toLowerCase() + " e não pode ser alterada.");
                         break;
                 }
 
-                if (!isValidTransition && !erros.isExisteErros()) { // Check if error wasn't already set
+                if (!isValidTransition && !erros.isExisteErros()) {
                     erros.add("Transição de status inválida de " + sessao.getStatus() + " para " + novoStatus + ".");
                 }
 
@@ -375,7 +372,7 @@ public class SessaoController extends HttpServlet {
                         sessao.setInicioEm(LocalDateTime.now());
                     } else if (novoStatus == SessionStatus.FINALIZADA || novoStatus == SessionStatus.CANCELADA) {
                         sessao.setFinalizadoEm(LocalDateTime.now());
-                        if (sessao.getInicioEm() == null) sessao.setInicioEm(sessao.getCriadoEm()); // Or now(), if appropriate
+                        if (sessao.getInicioEm() == null) sessao.setInicioEm(sessao.getCriadoEm());
                     }
                     sessaoDAO.update(sessao);
                 }
@@ -383,16 +380,16 @@ public class SessaoController extends HttpServlet {
         }
 
         if(erros.isExisteErros()){
-            request.setAttribute("mensagens", erros); // Set for display on the redirected page or via session
+            request.setAttribute("mensagens", erros);
         }
-        // Redirect back to the list of sessions for the project
-        if (sessao != null && sessao.getProjeto() != null) { // if sessao was loaded
+
+        if (sessao != null && sessao.getProjeto() != null) {
             response.sendRedirect(request.getContextPath() + "/sessoes/listaPorProjeto?projetoId=" + sessao.getProjeto().getId());
         } else if (projetoIdRedirect != null && !projetoIdRedirect.isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/sessoes/listaPorProjeto?projetoId=" + projetoIdRedirect);
         }
         else {
-            response.sendRedirect(request.getContextPath() + "/"); // Fallback redirect
+            response.sendRedirect(request.getContextPath() + "/");
         }
     }
 
@@ -415,33 +412,29 @@ public class SessaoController extends HttpServlet {
 
         if (erros.isExisteErros()) {
             request.setAttribute("mensagens", erros);
-            // Redirect to a relevant list page or a general error page
-            RequestDispatcher rd = request.getRequestDispatcher("/erro.jsp"); // Or a more specific error view
+            RequestDispatcher rd = request.getRequestDispatcher("/erro.jsp");
             rd.forward(request, response);
             return;
         }
 
-        Sessao sessao = sessaoDAO.get(id); // This fetches the Sessao object with its related entities
+        Sessao sessao = sessaoDAO.get(id);
 
         if (sessao == null) {
             erros.add("Sessão não encontrada.");
             request.setAttribute("mensagens", erros);
-            RequestDispatcher rd = request.getRequestDispatcher("/erro.jsp"); // Or a more specific error view
+            RequestDispatcher rd = request.getRequestDispatcher("/erro.jsp");
             rd.forward(request, response);
             return;
         }
 
-        // Permission check (as before, ensure this logic is robust for your needs)
         boolean canView = false;
-        if (usuarioLogado != null) { // Ensure usuarioLogado is not null
+        if (usuarioLogado != null) {
             if (Role.ADMIN.equals(usuarioLogado.getTipo())) {
                 canView = true;
             } else if (Role.TESTER.equals(usuarioLogado.getTipo())) {
                 if (sessao.getTestador() != null && sessao.getTestador().getId().equals(usuarioLogado.getId())) {
                     canView = true;
                 } else {
-                    // Optional: Add logic here to check if tester is part of sessao.getProjeto()
-                    // For simplicity now, only assigned tester and admin can view.
                 }
             }
         }

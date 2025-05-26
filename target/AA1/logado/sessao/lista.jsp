@@ -12,7 +12,6 @@
     <link href="${pageContext.request.contextPath}/layout.css" rel="stylesheet" type="text/css"/>
     <script>
       function confirmAction(formId) {
-        // Ensure 'confirm.link' key exists in your properties
         if (confirm("<fmt:message key='confirm.link' />")) {
           document.getElementById(formId).submit();
         }
@@ -86,14 +85,13 @@
               <td><a href="${pageContext.request.contextPath}/sessoes/detalhes?id=${sessaoView.id}"><c:out value="${sessaoView.titulo}" /></a></td>
               <td><c:out value="${sessaoView.testador.nome}" /></td>
               <td><c:out value="${sessaoView.estrategia.nome}" /></td>
-                <%-- MODIFIED for robustness --%>
               <td><fmt:message key="session.status.${sessaoView.status.name()}"/></td>
               <td><c:out value="${sessaoView.criadoEmFormatado}" /></td>
               <td><c:out value="${sessaoView.inicioEmFormatado}" /></td>
               <td><c:out value="${sessaoView.finalizadoEmFormatado}" /></td>
               <td>
                 <c:if test="${(sessionScope.usuarioLogado.tipo.name() == 'ADMIN' || sessionScope.usuarioLogado.id == sessaoView.testador.id)}">
-                  <%-- MODIFIED for robustness (compare enum names) --%>
+
                   <c:if test="${sessaoView.status.name() == 'CRIADA'}">
                     <form id="startForm${sessaoView.id}" action="${pageContext.request.contextPath}/sessoes/atualizarStatus" method="post" style="display:inline;">
                       <input type="hidden" name="sessaoId" value="${sessaoView.id}" />
@@ -112,7 +110,6 @@
                       </button>
                     </form>
                   </c:if>
-                  <%-- MODIFIED for robustness (compare enum names) --%>
                   <c:if test="${sessaoView.status.name() == 'EM_ANDAMENTO'}">
                     <form id="finishForm${sessaoView.id}" action="${pageContext.request.contextPath}/sessoes/atualizarStatus" method="post" style="display:inline;">
                       <input type="hidden" name="sessaoId" value="${sessaoView.id}" />

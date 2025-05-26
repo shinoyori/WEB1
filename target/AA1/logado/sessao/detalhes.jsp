@@ -59,15 +59,10 @@
             <p><strong><fmt:message key="session.finished.at" />:</strong> <c:out value="${finalizadoEmFormatado}" /></p>
           </c:if>
 
-            <%-- Placeholder for Bugs related to this session if you implement that later --%>
-            <%-- <h3>Bugs Encontrados:</h3> --%>
-            <%-- <c:forEach var="bug" items="${sessao.bugs}"> ... </c:forEach> --%>
-
           <div class="form-actions">
             <a href="${pageContext.request.contextPath}/sessoes/listaPorProjeto?projetoId=${sessao.projeto.id}" class="button">
               <fmt:message key="return.to.sessions.list.for.project" />
             </a>
-              <%-- Lifecycle actions could be added here too if appropriate --%>
             <c:if test="${(sessionScope.usuarioLogado.tipo == 'ADMIN' || sessionScope.usuarioLogado.id == sessao.testador.id)}">
               <c:if test="${sessao.status == 'CRIADA'}">
                 <form action="${pageContext.request.contextPath}/sessoes/atualizarStatus" method="post" style="display:inline;">

@@ -33,8 +33,6 @@ public class SessaoDAO extends GenericDAO {
 
             ps.setString(1, sessao.getTitulo());
             ps.setString(2, sessao.getDescricao());
-            // Ensure sessao.getTestador(), getEstrategia(), getProjeto() are not null before calling getId()
-            // This check should ideally happen in the controller or service layer before calling DAO.
             ps.setLong(3, sessao.getTestador().getId());
             ps.setInt(4, sessao.getEstrategia().getId());
             ps.setInt(5, sessao.getProjeto().getId());
@@ -109,7 +107,7 @@ public class SessaoDAO extends GenericDAO {
             if (rs.next()) {
                 sessao = mapResultSetToSessao(rs);
             }
-            // It's good practice to close ResultSet, though try-with-resources handles PreparedStatement and Connection
+
             if (rs != null) rs.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching sessao by ID: " + e.getMessage(), e);
@@ -120,7 +118,7 @@ public class SessaoDAO extends GenericDAO {
     public List<Sessao> getAllByProjetoId(int projetoId, String sortBy, String sortOrder) {
         List<Sessao> listaSessoes = new ArrayList<>();
 
-        String sqlSortByColumn = "s.criadoEm"; // Default sort column with alias
+        String sqlSortByColumn = "s.criadoEm";
         boolean needsUserJoin = false;
 
         if (sortBy != null && !sortBy.isEmpty()) {
@@ -129,13 +127,12 @@ public class SessaoDAO extends GenericDAO {
             } else if ("status".equalsIgnoreCase(sortBy)) {
                 sqlSortByColumn = "s.status";
             } else if ("testador".equalsIgnoreCase(sortBy)) {
-                sqlSortByColumn = "u.nome"; // User table alias 'u', column 'nome'
+                sqlSortByColumn = "u.nome";
                 needsUserJoin = true;
             }
-            // Add other valid columns from Sessao table if needed, e.g., s.inicioEm
         }
 
-        String sqlSortOrder = ("ASC".equalsIgnoreCase(sortOrder)) ? "ASC" : "DESC"; // Default to DESC if not ASC
+        String sqlSortOrder = ("ASC".equalsIgnoreCase(sortOrder)) ? "ASC" : "DESC";
         String orderByClause = " ORDER BY " + sqlSortByColumn + " " + sqlSortOrder;
 
         String sql = "SELECT s.* FROM Sessao s ";
@@ -162,17 +159,13 @@ public class SessaoDAO extends GenericDAO {
     public List<Sessao> getAllByTestadorId(long testadorId, String sortBy, String sortOrder) {
         List<Sessao> listaSessoes = new ArrayList<>();
 
-        // Corrected: Implement dynamic sorting if intended, or remove parameters
-        String sqlSortByColumn = "criadoEm"; // Default sort column (no alias needed if only Sessao in FROM)
-        // Assuming sortBy here refers to columns directly on the Sessao table for simplicity
-        // If joining is needed for sorting (e.g. by project name), add join logic similar to getAllByProjetoId
+        String sqlSortByColumn = "criadoEm";
         if (sortBy != null && !sortBy.isEmpty()) {
             if ("titulo".equalsIgnoreCase(sortBy)) {
                 sqlSortByColumn = "titulo";
             } else if ("status".equalsIgnoreCase(sortBy)) {
                 sqlSortByColumn = "status";
             }
-            // Add other valid columns from Sessao table
         }
         String sqlSortOrder = ("ASC".equalsIgnoreCase(sortOrder)) ? "ASC" : "DESC";
         String orderByClause = " ORDER BY " + sqlSortByColumn + " " + sqlSortOrder;
@@ -240,16 +233,16 @@ public class SessaoDAO extends GenericDAO {
 
         String statusString = rs.getString("status");
         System.out.println("  Raw status string from DB: '" + statusString + "'"); // DEBUG
-        SessionStatus status = null; // Initialize to null
+        SessionStatus status = null;
         try {
-            if (statusString != null) { // Check if string itself is null
-                status = SessionStatus.valueOf(statusString.trim().toUpperCase()); // Trim and convert to uppercase for safety
+            if (statusString != null) {
+                status = SessionStatus.valueOf(statusString.trim().toUpperCase());
             } else {
                 System.out.println("  !! Status string from DB is NULL, though schema says NOT NULL. Check DB data for session ID " + id); // DEBUG
             }
         } catch (IllegalArgumentException e) {
             System.out.println("  !! FAILED to convert status string '" + statusString + "' to SessionStatus enum for session ID " + id + ". Error: " + e.getMessage()); // DEBUG
-            // Decide how to handle this - throw error, use default, or leave status as null (current behavior)
+
         }
         System.out.println("  Final SessionStatus object: " + status); // DEBUG
 

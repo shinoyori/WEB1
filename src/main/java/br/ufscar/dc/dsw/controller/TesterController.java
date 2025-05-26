@@ -23,12 +23,12 @@ public class TesterController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private ProjetoDAO projetoDAO;
-    private SessaoDAO sessaoDAO; // Optional: for listing tester's own sessions
+    private SessaoDAO sessaoDAO;
 
     @Override
     public void init() {
         projetoDAO = new ProjetoDAO();
-        sessaoDAO = new SessaoDAO(); // Initialize if used
+        sessaoDAO = new SessaoDAO();
     }
 
     @Override
@@ -85,9 +85,7 @@ public class TesterController extends HttpServlet {
         List<Projeto> projetosDoTester = projetoDAO.getProjetosByUsuarioId(testadorLogado.getId());
         request.setAttribute("projetosDoTester", projetosDoTester);
 
-        // Optional: Fetch and display current tester's active/recent sessions
-        // List<Sessao> sessoesDoTester = sessaoDAO.getAllByTestadorId(testadorLogado.getId(), "criadoEm", "desc");
-        // request.setAttribute("sessoesDoTester", sessoesDoTester);
+
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/tester/dashboard.jsp");
         dispatcher.forward(request, response);
